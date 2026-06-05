@@ -9,6 +9,7 @@ import {
 import { getCommentsByUser, deleteComment } from "../api/comments";
 import { useAuth } from "../context/AuthContext";
 import DefaultAvatar from "../components/DefaultAvatar";
+import { useTranslation } from "react-i18next";
 
 export default function ProfilePage() {
   const { id } = useParams();
@@ -18,6 +19,7 @@ export default function ProfilePage() {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("watchlist");
+  const { t } = useTranslation();
 
   const isOwner = user?.id === id;
 
@@ -70,7 +72,7 @@ export default function ProfilePage() {
           justifyContent: "center",
         }}
       >
-        <p style={{ color: "#666" }}>Yükleniyor...</p>
+        <p style={{ color: "#666" }}>{t("profile.loading")}</p>
       </div>
     );
 
@@ -85,7 +87,7 @@ export default function ProfilePage() {
           justifyContent: "center",
         }}
       >
-        <p style={{ color: "#666" }}>Kullanıcı bulunamadı.</p>
+        <p style={{ color: "#666" }}>{t("profile.not_found")}</p>
       </div>
     );
 
@@ -165,7 +167,7 @@ export default function ProfilePage() {
                 marginBottom: "0.25rem",
               }}
             >
-              Profili Düzenle
+              {t("profile.edit_profile")}
             </Link>
           )}
         </div>
@@ -206,7 +208,9 @@ export default function ProfilePage() {
                 fontWeight: activeTab === tab ? 600 : 400,
               }}
             >
-              {tab === "watchlist" ? "İzleme Listesi" : "Yorumlar"}
+              {tab === "watchlist"
+                ? t("profile.watchlist_tab")
+                : t("profile.comments_tab")}
             </button>
           ))}
         </div>
@@ -214,7 +218,7 @@ export default function ProfilePage() {
         {activeTab === "watchlist" && (
           <div>
             {watchlist.length === 0 ? (
-              <p style={{ color: "#666" }}>İzleme listesi boş.</p>
+              <p style={{ color: "#666" }}>{t("profile.watchlist_empty")}</p>
             ) : (
               <div
                 style={{
@@ -289,7 +293,7 @@ export default function ProfilePage() {
                           cursor: "pointer",
                         }}
                       >
-                        Kaldır
+                        {t("profile.remove")}
                       </button>
                     )}
                   </div>
@@ -309,7 +313,7 @@ export default function ProfilePage() {
             }}
           >
             {comments.length === 0 ? (
-              <p style={{ color: "#666" }}>Henüz yorum yok.</p>
+              <p style={{ color: "#666" }}>{t("profile.comments_empty")}</p>
             ) : (
               comments.map((comment) => (
                 <Link
@@ -403,7 +407,7 @@ export default function ProfilePage() {
                               flexShrink: 0,
                             }}
                           >
-                            Sil
+                            {t("profile.delete_comment")}
                           </button>
                         )}
                       </div>
