@@ -10,6 +10,7 @@ import { uploadProfilePhoto, uploadCoverPhoto } from "../api/s3";
 import { useAuth } from "../context/AuthContext";
 import Toast from "../components/Toast";
 import DefaultAvatar from "../components/DefaultAvatar";
+import { useTranslation } from "react-i18next";
 
 export default function SettingsPage() {
   const { user, setUser, logoutUser } = useAuth();
@@ -28,6 +29,7 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState({ message: null, type: "success" });
+  const { t } = useTranslation();
 
   useEffect(() => {
     getMyProfile()
@@ -60,9 +62,9 @@ export default function SettingsPage() {
         coverPhoto: profile.coverPhoto,
       });
       setProfile({ ...profile, profilePhoto: url });
-      showToast("Profil fotoğrafı güncellendi.");
+      showToast(t("settings.profile_photo_updated"));
     } catch (err) {
-      showToast("Fotoğraf yüklenemedi.", "error");
+      showToast(t("settings.photo_failed"), "error");
     }
   };
 
@@ -78,9 +80,9 @@ export default function SettingsPage() {
         coverPhoto: url,
       });
       setProfile({ ...profile, coverPhoto: url });
-      showToast("Kapak fotoğrafı güncellendi.");
+      showToast(t("settings.cover_photo_updated"));
     } catch (err) {
-      showToast("Fotoğraf yüklenemedi.", "error");
+      showToast(t("settings.photo_failed"), "error");
     }
   };
 
@@ -97,10 +99,10 @@ export default function SettingsPage() {
       });
       setProfile(res.data);
       setUser(res.data);
-      showToast("Profil güncellendi.");
+      showToast(t("settings.profile_updated"));
     } catch (err) {
       showToast(
-        err.response?.data?.message || "Güncelleme başarısız.",
+        err.response?.data?.message || t("settings.update_failed"),
         "error",
       );
     } finally {
@@ -113,10 +115,10 @@ export default function SettingsPage() {
     try {
       await changePassword(passwordForm);
       setPasswordForm({ oldPassword: "", newPassword: "" });
-      showToast("Şifre güncellendi.");
+      showToast(t("settings.password_updated"));
     } catch (err) {
       showToast(
-        err.response?.data?.message || "Şifre değiştirilemedi.",
+        err.response?.data?.message || t("settings.password_failed"),
         "error",
       );
     }
@@ -124,13 +126,16 @@ export default function SettingsPage() {
 
   const handleDeleteAccount = async (e) => {
     e.preventDefault();
-    if (!window.confirm("Hesabını silmek istediğine emin misin?")) return;
+    if (!window.confirm(t("settings.confirm_delete"))) return;
     try {
       await deleteAccount({ password: deleteForm.password });
       logoutUser();
       navigate("/");
     } catch (err) {
-      showToast(err.response?.data?.message || "Hesap silinemedi.", "error");
+      showToast(
+        err.response?.data?.message || t("settings.account_delete_failed"),
+        "error",
+      );
     }
   };
 
@@ -145,7 +150,7 @@ export default function SettingsPage() {
           justifyContent: "center",
         }}
       >
-        <p style={{ color: "#666" }}>Yükleniyor...</p>
+        <p style={{ color: "#666" }}>{t("settings.loading")}</p>
       </div>
     );
 
@@ -161,15 +166,14 @@ export default function SettingsPage() {
             marginBottom: "2rem",
           }}
         >
-          Profil Ayarları
+          {t("settings.title")}
         </h1>
 
-        {/* Fotoğraflar */}
         <div style={cardStyle}>
-          <h2 style={sectionTitle}>Fotoğraflar</h2>
+          <h2 style={sectionTitle}>{t("settings.photos")}</h2>
           <div style={{ display: "flex", gap: "2rem", flexWrap: "wrap" }}>
             <div>
-              <p style={labelStyle}>Profil Fotoğrafı</p>
+              <p style={labelStyle}>{t("settings.profile_photo")}</p>
               <div
                 style={{ display: "flex", alignItems: "center", gap: "1rem" }}
               >
@@ -197,7 +201,7 @@ export default function SettingsPage() {
                   )}
                 </div>
                 <label style={uploadButtonStyle}>
-                  Değiştir
+                  {t("settings.change")}
                   <input
                     type="file"
                     accept="image/*"
@@ -208,7 +212,7 @@ export default function SettingsPage() {
               </div>
             </div>
             <div>
-              <p style={labelStyle}>Kapak Fotoğrafı</p>
+              <p style={labelStyle}>{t("settings.cover_photo")}</p>
               <div
                 style={{ display: "flex", alignItems: "center", gap: "1rem" }}
               >
@@ -242,7 +246,7 @@ export default function SettingsPage() {
                   )}
                 </div>
                 <label style={uploadButtonStyle}>
-                  Değiştir
+                  {t("settings.change")}
                   <input
                     type="file"
                     accept="image/*"
@@ -255,15 +259,14 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        {/* Profil Bilgileri */}
         <div style={cardStyle}>
-          <h2 style={sectionTitle}>Profil Bilgileri</h2>
+          <h2 style={sectionTitle}>{t("settings.profile_info")}</h2>
           <form
             onSubmit={handleProfileUpdate}
             style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
           >
             <div>
-              <label style={labelStyle}>Kullanıcı Adı *</label>
+              <label style={labelStyle}>{t("settings.username")}</label>
               <input
                 value={form.username}
                 onChange={(e) => setForm({ ...form, username: e.target.value })}
@@ -273,7 +276,7 @@ export default function SettingsPage() {
             </div>
             <div style={{ display: "flex", gap: "1rem" }}>
               <div style={{ flex: 1 }}>
-                <label style={labelStyle}>Ad</label>
+                <label style={labelStyle}>{t("settings.first_name")}</label>
                 <input
                   value={form.firstName}
                   onChange={(e) =>
@@ -283,7 +286,7 @@ export default function SettingsPage() {
                 />
               </div>
               <div style={{ flex: 1 }}>
-                <label style={labelStyle}>Soyad</label>
+                <label style={labelStyle}>{t("settings.last_name")}</label>
                 <input
                   value={form.lastName}
                   onChange={(e) =>
@@ -294,20 +297,19 @@ export default function SettingsPage() {
               </div>
             </div>
             <button type="submit" disabled={saving} style={saveButtonStyle}>
-              {saving ? "Kaydediliyor..." : "Kaydet"}
+              {saving ? t("settings.saving") : t("settings.save")}
             </button>
           </form>
         </div>
 
-        {/* Şifre Değiştir */}
         <div style={cardStyle}>
-          <h2 style={sectionTitle}>Şifre Değiştir</h2>
+          <h2 style={sectionTitle}>{t("settings.change_password")}</h2>
           <form
             onSubmit={handlePasswordChange}
             style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
           >
             <div>
-              <label style={labelStyle}>Mevcut Şifre</label>
+              <label style={labelStyle}>{t("settings.current_password")}</label>
               <input
                 type="password"
                 value={passwordForm.oldPassword}
@@ -322,7 +324,7 @@ export default function SettingsPage() {
               />
             </div>
             <div>
-              <label style={labelStyle}>Yeni Şifre</label>
+              <label style={labelStyle}>{t("settings.new_password")}</label>
               <input
                 type="password"
                 value={passwordForm.newPassword}
@@ -337,25 +339,26 @@ export default function SettingsPage() {
               />
             </div>
             <button type="submit" style={saveButtonStyle}>
-              Şifreyi Güncelle
+              {t("settings.update_password")}
             </button>
           </form>
         </div>
 
-        {/* Hesabı Sil */}
         <div style={{ ...cardStyle, borderColor: "#3a1010" }}>
-          <h2 style={{ ...sectionTitle, color: "#C62A2A" }}>Hesabı Sil</h2>
+          <h2 style={{ ...sectionTitle, color: "#C62A2A" }}>
+            {t("settings.delete_account")}
+          </h2>
           <p
             style={{ color: "#666", fontSize: "0.9rem", marginBottom: "1rem" }}
           >
-            Bu işlem geri alınamaz.
+            {t("settings.delete_warning")}
           </p>
           <form
             onSubmit={handleDeleteAccount}
             style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
           >
             <div>
-              <label style={labelStyle}>Şifrenizi Girin</label>
+              <label style={labelStyle}>{t("settings.enter_password")}</label>
               <input
                 type="password"
                 value={deleteForm.password}
@@ -377,7 +380,7 @@ export default function SettingsPage() {
                 fontSize: "0.95rem",
               }}
             >
-              Hesabı Sil
+              {t("settings.delete_btn")}
             </button>
           </form>
         </div>

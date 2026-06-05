@@ -1,440 +1,380 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import {
-  getMyProfile,
-  updateProfile,
-  changePassword,
-  deleteAccount,
-} from "../api/users";
-import { uploadProfilePhoto, uploadCoverPhoto } from "../api/s3";
-import { useAuth } from "../context/AuthContext";
-import Toast from "../components/Toast";
-import DefaultAvatar from "../components/DefaultAvatar";
-import { useTranslation } from "react-i18next";
+import i18n from "i18next";
+import { initReactI18next } from "react-i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
 
-export default function SettingsPage() {
-  const { user, setUser, logoutUser } = useAuth();
-  const navigate = useNavigate();
-  const [profile, setProfile] = useState(null);
-  const [form, setForm] = useState({
-    username: "",
-    firstName: "",
-    lastName: "",
+const resources = {
+  en: {
+    translation: {
+      nav: {
+        home: "Home",
+        movies: "Movies",
+        login: "Login",
+        register: "Register",
+        logout: "Logout",
+        profile: "Profile",
+        admin: "Admin Panel",
+        settings: "Settings",
+      },
+      home: {
+        subtitle: "Original reviews on cinema",
+        recent: "Recently Added",
+        all_movies: "All Movies →",
+        loading: "Loading...",
+        no_movies: "No movies added yet.",
+      },
+      auth: {
+        login_title: "Login",
+        no_account: "Don't have an account?",
+        register_link: "Register",
+        have_account: "Already have an account?",
+        login_link: "Login",
+        username: "Username *",
+        username_placeholder: "username",
+        first_name: "First Name",
+        first_name_placeholder: "Your first name",
+        last_name: "Last Name",
+        last_name_placeholder: "Your last name",
+        email: "Email *",
+        email_placeholder: "example@mail.com",
+        password: "Password *",
+        logging_in: "Logging in...",
+        login_btn: "Login",
+        login_failed: "Login failed",
+        registering: "Registering...",
+        register_btn: "Register",
+        register_title: "Register",
+        register_failed: "Registration failed",
+      },
+      movie: {
+        in_list: "✓ Listed",
+        add_list: "+ List",
+        loading: "Loading...",
+        not_found: "Movie not found.",
+        review_video: "Review Video",
+        comments: "Comments",
+        comment_placeholder: "Write your comment...",
+        comment_btn: "Comment",
+        no_comments: "No comments yet.",
+        delete_comment: "Delete",
+      },
+      movies: {
+        title: "All Movies",
+        search_placeholder: "Search movies...",
+        search_btn: "Search",
+        loading: "Loading...",
+        not_found: "No movies found.",
+        prev: "← Previous",
+        next: "Next →",
+      },
+      profile: {
+        loading: "Loading...",
+        not_found: "User not found.",
+        edit_profile: "Edit Profile",
+        watchlist_tab: "Watchlist",
+        comments_tab: "Comments",
+        watchlist_empty: "Watchlist is empty.",
+        comments_empty: "No comments yet.",
+        remove: "Remove",
+        delete_comment: "Delete",
+      },
+      settings: {
+        title: "Profile Settings",
+        loading: "Loading...",
+        photos: "Photos",
+        profile_photo: "Profile Photo",
+        cover_photo: "Cover Photo",
+        change: "Change",
+        profile_info: "Profile Information",
+        username: "Username *",
+        first_name: "First Name",
+        last_name: "Last Name",
+        saving: "Saving...",
+        save: "Save",
+        change_password: "Change Password",
+        current_password: "Current Password",
+        new_password: "New Password",
+        update_password: "Update Password",
+        delete_account: "Delete Account",
+        delete_warning: "This action cannot be undone.",
+        enter_password: "Enter Your Password",
+        delete_btn: "Delete Account",
+        confirm_delete: "Are you sure you want to delete your account?",
+        profile_updated: "Profile updated.",
+        update_failed: "Update failed.",
+        photo_failed: "Photo upload failed.",
+        profile_photo_updated: "Profile photo updated.",
+        cover_photo_updated: "Cover photo updated.",
+        password_updated: "Password updated.",
+        password_failed: "Password could not be changed.",
+        account_deleted: "Account deleted.",
+        account_delete_failed: "Account could not be deleted.",
+      },
+      admin: {
+        title: "Admin Panel",
+        tabs_movies: "Movies",
+        tabs_users: "Users",
+        tmdb_title: "Add Movie from TMDB",
+        tmdb_placeholder: "Search movie name...",
+        search_btn: "Search",
+        existing_movies: "Search & Edit Existing Movies",
+        movie_placeholder: "Search movie name...",
+        not_found: "No movies found.",
+        not_searched: "No search performed yet.",
+        edit_btn: "Edit",
+        delete_btn: "Delete",
+        back_btn: "← Back",
+        add_movie_title: "Add Movie —",
+        edit_movie_title: "Edit Movie —",
+        poster: "Poster",
+        upload_poster: "Upload Poster",
+        english_name: "English Name *",
+        original_name: "Original Name",
+        original_placeholder: "Name in original language...",
+        review: "Review *",
+        review_placeholder: "Movie review...",
+        genre: "Genre",
+        genre_placeholder: "Drama, Thriller...",
+        year: "Year",
+        short_video: "Short Video",
+        long_video: "Long Video",
+        video_placeholder: "URL will appear after upload...",
+        upload_video: "Upload Video",
+        saving: "Saving...",
+        save: "Save",
+        cancel: "Cancel",
+        confirm_delete_movie: "Are you sure you want to delete this movie?",
+        confirm_delete_user: "Are you sure you want to delete this account?",
+        poster_uploaded: "Poster uploaded.",
+        poster_failed: "Poster upload failed.",
+        short_video_uploaded: "Short video uploaded.",
+        long_video_failed: "Video upload failed.",
+        long_video_uploaded: "Long video uploaded.",
+        movie_added: "Movie added.",
+        movie_add_failed: "Movie could not be added.",
+        movie_updated: "Movie updated.",
+        movie_update_failed: "Movie could not be updated.",
+        movie_deleted: "Movie deleted.",
+        movie_delete_failed: "Movie could not be deleted.",
+        search_failed: "Search failed.",
+        user_search_title: "Search Users",
+        user_placeholder: "Search username...",
+        user_not_found: "No users found.",
+        user_not_searched: "No search performed yet.",
+        ban_unban: "Ban/Unban",
+        make_user: "Make USER",
+        make_admin: "Make ADMIN",
+        role_updated: "Role updated.",
+        role_failed: "Role could not be changed.",
+        account_deleted: "Account deleted.",
+        account_delete_failed: "Account could not be deleted.",
+        status_changed: "Account status changed.",
+      },
+      common: {
+        loading: "Loading...",
+        error: "Something went wrong.",
+        save: "Save",
+        cancel: "Cancel",
+        delete: "Delete",
+        edit: "Edit",
+        search: "Search",
+        see_all: "See All",
+      },
+    },
+  },
+  tr: {
+    translation: {
+      nav: {
+        home: "Ana Sayfa",
+        movies: "Filmler",
+        login: "Giriş Yap",
+        register: "Kayıt Ol",
+        logout: "Çıkış Yap",
+        profile: "Profil",
+        admin: "Admin Paneli",
+        settings: "Ayarlar",
+      },
+      home: {
+        subtitle: "Sinema üzerine özgün incelemeler",
+        recent: "Son Eklenenler",
+        all_movies: "Tüm Filmler →",
+        loading: "Yükleniyor...",
+        no_movies: "Henüz film eklenmemiş.",
+      },
+      auth: {
+        login_title: "Giriş Yap",
+        no_account: "Hesabın yok mu?",
+        register_link: "Kayıt ol",
+        have_account: "Zaten hesabın var mı?",
+        login_link: "Giriş yap",
+        username: "Kullanıcı Adı *",
+        username_placeholder: "kullaniciadi",
+        first_name: "Ad",
+        first_name_placeholder: "Adın",
+        last_name: "Soyad",
+        last_name_placeholder: "Soyadın",
+        email: "E-posta *",
+        email_placeholder: "ornek@mail.com",
+        password: "Şifre *",
+        logging_in: "Giriş yapılıyor...",
+        login_btn: "Giriş Yap",
+        login_failed: "Giriş başarısız",
+        registering: "Kayıt yapılıyor...",
+        register_btn: "Kayıt Ol",
+        register_title: "Kayıt Ol",
+        register_failed: "Kayıt başarısız",
+      },
+      movie: {
+        in_list: "✓ Listede",
+        add_list: "+ Liste",
+        loading: "Yükleniyor...",
+        not_found: "Film bulunamadı.",
+        review_video: "İnceleme Videosu",
+        comments: "Yorumlar",
+        comment_placeholder: "Yorumunuzu yazın...",
+        comment_btn: "Yorum Yap",
+        no_comments: "Henüz yorum yok.",
+        delete_comment: "Sil",
+      },
+      movies: {
+        title: "Tüm Filmler",
+        search_placeholder: "Film ara...",
+        search_btn: "Ara",
+        loading: "Yükleniyor...",
+        not_found: "Film bulunamadı.",
+        prev: "← Önceki",
+        next: "Sonraki →",
+      },
+      profile: {
+        loading: "Yükleniyor...",
+        not_found: "Kullanıcı bulunamadı.",
+        edit_profile: "Profili Düzenle",
+        watchlist_tab: "İzleme Listesi",
+        comments_tab: "Yorumlar",
+        watchlist_empty: "İzleme listesi boş.",
+        comments_empty: "Henüz yorum yok.",
+        remove: "Kaldır",
+        delete_comment: "Sil",
+      },
+      settings: {
+        title: "Profil Ayarları",
+        loading: "Yükleniyor...",
+        photos: "Fotoğraflar",
+        profile_photo: "Profil Fotoğrafı",
+        cover_photo: "Kapak Fotoğrafı",
+        change: "Değiştir",
+        profile_info: "Profil Bilgileri",
+        username: "Kullanıcı Adı *",
+        first_name: "Ad",
+        last_name: "Soyad",
+        saving: "Kaydediliyor...",
+        save: "Kaydet",
+        change_password: "Şifre Değiştir",
+        current_password: "Mevcut Şifre",
+        new_password: "Yeni Şifre",
+        update_password: "Şifreyi Güncelle",
+        delete_account: "Hesabı Sil",
+        delete_warning: "Bu işlem geri alınamaz.",
+        enter_password: "Şifrenizi Girin",
+        delete_btn: "Hesabı Sil",
+        confirm_delete: "Hesabını silmek istediğine emin misin?",
+        profile_updated: "Profil güncellendi.",
+        update_failed: "Güncelleme başarısız.",
+        photo_failed: "Fotoğraf yüklenemedi.",
+        profile_photo_updated: "Profil fotoğrafı güncellendi.",
+        cover_photo_updated: "Kapak fotoğrafı güncellendi.",
+        password_updated: "Şifre güncellendi.",
+        password_failed: "Şifre değiştirilemedi.",
+        account_deleted: "Hesap silindi.",
+        account_delete_failed: "Hesap silinemedi.",
+      },
+      admin: {
+        title: "Admin Paneli",
+        tabs_movies: "Filmler",
+        tabs_users: "Kullanıcılar",
+        tmdb_title: "TMDB'den Film Ekle",
+        tmdb_placeholder: "Film adı ara...",
+        search_btn: "Ara",
+        existing_movies: "Mevcut Filmleri Ara & Düzenle",
+        movie_placeholder: "Film adı ara...",
+        not_found: "Film bulunamadı.",
+        not_searched: "Henüz arama yapılmadı.",
+        edit_btn: "Düzenle",
+        delete_btn: "Sil",
+        back_btn: "← Geri",
+        add_movie_title: "Film Ekle —",
+        edit_movie_title: "Film Düzenle —",
+        poster: "Poster",
+        upload_poster: "Poster Yükle",
+        english_name: "İngilizce İsim *",
+        original_name: "Orijinal İsim",
+        original_placeholder: "Orijinal dildeki isim...",
+        review: "İnceleme *",
+        review_placeholder: "Film incelemesi...",
+        genre: "Tür",
+        genre_placeholder: "Drama, Thriller...",
+        year: "Yıl",
+        short_video: "Kısa Video",
+        long_video: "Uzun Video",
+        video_placeholder: "Video yüklenince URL otomatik gelecek...",
+        upload_video: "Video Yükle",
+        saving: "Kaydediliyor...",
+        save: "Kaydet",
+        cancel: "İptal",
+        confirm_delete_movie: "Bu filmi silmek istediğine emin misin?",
+        confirm_delete_user: "Bu hesabı silmek istediğine emin misin?",
+        poster_uploaded: "Poster yüklendi.",
+        poster_failed: "Poster yüklenemedi.",
+        short_video_uploaded: "Kısa video yüklendi.",
+        long_video_failed: "Video yüklenemedi.",
+        long_video_uploaded: "Uzun video yüklendi.",
+        movie_added: "Film eklendi.",
+        movie_add_failed: "Film eklenemedi.",
+        movie_updated: "Film güncellendi.",
+        movie_update_failed: "Film güncellenemedi.",
+        movie_deleted: "Film silindi.",
+        movie_delete_failed: "Film silinemedi.",
+        search_failed: "Arama başarısız.",
+        user_search_title: "Kullanıcı Ara",
+        user_placeholder: "Kullanıcı adı ara...",
+        user_not_found: "Kullanıcı bulunamadı.",
+        user_not_searched: "Henüz arama yapılmadı.",
+        ban_unban: "Ban/Unban",
+        make_user: "USER yap",
+        make_admin: "ADMIN yap",
+        role_updated: "Rol güncellendi.",
+        role_failed: "Rol değiştirilemedi.",
+        account_deleted: "Hesap silindi.",
+        account_delete_failed: "Hesap silinemedi.",
+        status_changed: "Hesap durumu değiştirildi.",
+      },
+      common: {
+        loading: "Yükleniyor...",
+        error: "Bir şeyler ters gitti.",
+        save: "Kaydet",
+        cancel: "İptal",
+        delete: "Sil",
+        edit: "Düzenle",
+        search: "Ara",
+        see_all: "Tümünü Gör",
+      },
+    },
+  },
+};
+
+i18n
+  .use(LanguageDetector)
+  .use(initReactI18next)
+  .init({
+    resources,
+    lng: "en",
+    fallbackLng: "en",
+    interpolation: {
+      escapeValue: false,
+    },
+    detection: {
+      order: ["localStorage", "navigator"],
+      caches: ["localStorage"],
+    },
   });
-  const [passwordForm, setPasswordForm] = useState({
-    oldPassword: "",
-    newPassword: "",
-  });
-  const [deleteForm, setDeleteForm] = useState({ password: "" });
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [toast, setToast] = useState({ message: null, type: "success" });
-  const { t } = useTranslation();
 
-  useEffect(() => {
-    getMyProfile()
-      .then((res) => {
-        setProfile(res.data);
-        setForm({
-          username: res.data.username || "",
-          firstName: res.data.firstName || "",
-          lastName: res.data.lastName || "",
-        });
-      })
-      .catch(console.error)
-      .finally(() => setLoading(false));
-  }, []);
-
-  const showToast = (message, type = "success") => {
-    setToast({ message, type });
-    setTimeout(() => setToast({ message: null, type: "success" }), 3000);
-  };
-
-  const handleProfilePhotoChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    try {
-      const uploadRes = await uploadProfilePhoto(file);
-      const url = uploadRes.data;
-      await updateProfile({
-        username: profile.username,
-        profilePhoto: url,
-        coverPhoto: profile.coverPhoto,
-      });
-      setProfile({ ...profile, profilePhoto: url });
-      showToast(t("settings.profile_photo_updated"));
-    } catch (err) {
-      showToast(t("settings.photo_failed"), "error");
-    }
-  };
-
-  const handleCoverPhotoChange = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    try {
-      const uploadRes = await uploadCoverPhoto(file);
-      const url = uploadRes.data;
-      await updateProfile({
-        username: profile.username,
-        profilePhoto: profile.profilePhoto,
-        coverPhoto: url,
-      });
-      setProfile({ ...profile, coverPhoto: url });
-      showToast(t("settings.cover_photo_updated"));
-    } catch (err) {
-      showToast(t("settings.photo_failed"), "error");
-    }
-  };
-
-  const handleProfileUpdate = async (e) => {
-    e.preventDefault();
-    setSaving(true);
-    try {
-      const res = await updateProfile({
-        username: form.username,
-        firstName: form.firstName,
-        lastName: form.lastName,
-        profilePhoto: profile.profilePhoto,
-        coverPhoto: profile.coverPhoto,
-      });
-      setProfile(res.data);
-      setUser(res.data);
-      showToast(t("settings.profile_updated"));
-    } catch (err) {
-      showToast(
-        err.response?.data?.message || t("settings.update_failed"),
-        "error",
-      );
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handlePasswordChange = async (e) => {
-    e.preventDefault();
-    try {
-      await changePassword(passwordForm);
-      setPasswordForm({ oldPassword: "", newPassword: "" });
-      showToast(t("settings.password_updated"));
-    } catch (err) {
-      showToast(
-        err.response?.data?.message || t("settings.password_failed"),
-        "error",
-      );
-    }
-  };
-
-  const handleDeleteAccount = async (e) => {
-    e.preventDefault();
-    if (!window.confirm(t("settings.confirm_delete"))) return;
-    try {
-      await deleteAccount({ password: deleteForm.password });
-      logoutUser();
-      navigate("/");
-    } catch (err) {
-      showToast(
-        err.response?.data?.message || t("settings.account_delete_failed"),
-        "error",
-      );
-    }
-  };
-
-  if (loading)
-    return (
-      <div
-        style={{
-          background: "#0D0D0F",
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <p style={{ color: "#666" }}>{t("settings.loading")}</p>
-      </div>
-    );
-
-  return (
-    <div style={{ background: "#0D0D0F", minHeight: "100vh", padding: "2rem" }}>
-      <Toast message={toast.message} type={toast.type} />
-      <div style={{ maxWidth: "600px", margin: "0 auto" }}>
-        <h1
-          style={{
-            color: "#E8C547",
-            fontFamily: "'Playfair Display', serif",
-            fontSize: "1.8rem",
-            marginBottom: "2rem",
-          }}
-        >
-          {t("settings.title")}
-        </h1>
-
-        <div style={cardStyle}>
-          <h2 style={sectionTitle}>{t("settings.photos")}</h2>
-          <div style={{ display: "flex", gap: "2rem", flexWrap: "wrap" }}>
-            <div>
-              <p style={labelStyle}>{t("settings.profile_photo")}</p>
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "1rem" }}
-              >
-                <div
-                  style={{
-                    width: "70px",
-                    height: "70px",
-                    borderRadius: "50%",
-                    overflow: "hidden",
-                    border: "2px solid #2a2a3e",
-                  }}
-                >
-                  {profile?.profilePhoto ? (
-                    <img
-                      src={profile.profilePhoto}
-                      alt="profil"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                      }}
-                    />
-                  ) : (
-                    <DefaultAvatar size={70} />
-                  )}
-                </div>
-                <label style={uploadButtonStyle}>
-                  {t("settings.change")}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleProfilePhotoChange}
-                    style={{ display: "none" }}
-                  />
-                </label>
-              </div>
-            </div>
-            <div>
-              <p style={labelStyle}>{t("settings.cover_photo")}</p>
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "1rem" }}
-              >
-                <div
-                  style={{
-                    width: "120px",
-                    height: "40px",
-                    borderRadius: "4px",
-                    overflow: "hidden",
-                    border: "2px solid #2a2a3e",
-                  }}
-                >
-                  {profile?.coverPhoto ? (
-                    <img
-                      src={profile.coverPhoto}
-                      alt="kapak"
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                      }}
-                    />
-                  ) : (
-                    <div
-                      style={{
-                        width: "100%",
-                        height: "100%",
-                        background: "#1a1a2e",
-                      }}
-                    />
-                  )}
-                </div>
-                <label style={uploadButtonStyle}>
-                  {t("settings.change")}
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleCoverPhotoChange}
-                    style={{ display: "none" }}
-                  />
-                </label>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div style={cardStyle}>
-          <h2 style={sectionTitle}>{t("settings.profile_info")}</h2>
-          <form
-            onSubmit={handleProfileUpdate}
-            style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
-          >
-            <div>
-              <label style={labelStyle}>{t("settings.username")}</label>
-              <input
-                value={form.username}
-                onChange={(e) => setForm({ ...form, username: e.target.value })}
-                required
-                style={inputStyle}
-              />
-            </div>
-            <div style={{ display: "flex", gap: "1rem" }}>
-              <div style={{ flex: 1 }}>
-                <label style={labelStyle}>{t("settings.first_name")}</label>
-                <input
-                  value={form.firstName}
-                  onChange={(e) =>
-                    setForm({ ...form, firstName: e.target.value })
-                  }
-                  style={inputStyle}
-                />
-              </div>
-              <div style={{ flex: 1 }}>
-                <label style={labelStyle}>{t("settings.last_name")}</label>
-                <input
-                  value={form.lastName}
-                  onChange={(e) =>
-                    setForm({ ...form, lastName: e.target.value })
-                  }
-                  style={inputStyle}
-                />
-              </div>
-            </div>
-            <button type="submit" disabled={saving} style={saveButtonStyle}>
-              {saving ? t("settings.saving") : t("settings.save")}
-            </button>
-          </form>
-        </div>
-
-        <div style={cardStyle}>
-          <h2 style={sectionTitle}>{t("settings.change_password")}</h2>
-          <form
-            onSubmit={handlePasswordChange}
-            style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
-          >
-            <div>
-              <label style={labelStyle}>{t("settings.current_password")}</label>
-              <input
-                type="password"
-                value={passwordForm.oldPassword}
-                onChange={(e) =>
-                  setPasswordForm({
-                    ...passwordForm,
-                    oldPassword: e.target.value,
-                  })
-                }
-                required
-                style={inputStyle}
-              />
-            </div>
-            <div>
-              <label style={labelStyle}>{t("settings.new_password")}</label>
-              <input
-                type="password"
-                value={passwordForm.newPassword}
-                onChange={(e) =>
-                  setPasswordForm({
-                    ...passwordForm,
-                    newPassword: e.target.value,
-                  })
-                }
-                required
-                style={inputStyle}
-              />
-            </div>
-            <button type="submit" style={saveButtonStyle}>
-              {t("settings.update_password")}
-            </button>
-          </form>
-        </div>
-
-        <div style={{ ...cardStyle, borderColor: "#3a1010" }}>
-          <h2 style={{ ...sectionTitle, color: "#C62A2A" }}>
-            {t("settings.delete_account")}
-          </h2>
-          <p
-            style={{ color: "#666", fontSize: "0.9rem", marginBottom: "1rem" }}
-          >
-            {t("settings.delete_warning")}
-          </p>
-          <form
-            onSubmit={handleDeleteAccount}
-            style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
-          >
-            <div>
-              <label style={labelStyle}>{t("settings.enter_password")}</label>
-              <input
-                type="password"
-                value={deleteForm.password}
-                onChange={(e) => setDeleteForm({ password: e.target.value })}
-                required
-                style={inputStyle}
-              />
-            </div>
-            <button
-              type="submit"
-              style={{
-                background: "#C62A2A",
-                color: "#fff",
-                border: "none",
-                borderRadius: "4px",
-                padding: "0.75rem",
-                fontWeight: 700,
-                cursor: "pointer",
-                fontSize: "0.95rem",
-              }}
-            >
-              {t("settings.delete_btn")}
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-const cardStyle = {
-  background: "#111118",
-  border: "1px solid #1a1a2e",
-  borderRadius: "8px",
-  padding: "1.5rem",
-  marginBottom: "1.5rem",
-};
-const sectionTitle = {
-  color: "#e0e0e0",
-  fontSize: "1rem",
-  fontWeight: 600,
-  margin: "0 0 1.25rem",
-};
-const labelStyle = {
-  display: "block",
-  color: "#aaa",
-  fontSize: "0.85rem",
-  marginBottom: "0.4rem",
-};
-const inputStyle = {
-  width: "100%",
-  background: "#0D0D0F",
-  border: "1px solid #2a2a3e",
-  borderRadius: "4px",
-  padding: "0.65rem 0.75rem",
-  color: "#e0e0e0",
-  fontSize: "0.95rem",
-  outline: "none",
-  boxSizing: "border-box",
-};
-const saveButtonStyle = {
-  background: "#E8C547",
-  color: "#0D0D0F",
-  border: "none",
-  borderRadius: "4px",
-  padding: "0.75rem",
-  fontWeight: 700,
-  cursor: "pointer",
-  fontSize: "0.95rem",
-};
-const uploadButtonStyle = {
-  background: "transparent",
-  border: "1px solid #2a2a3e",
-  borderRadius: "4px",
-  padding: "0.4rem 0.8rem",
-  color: "#e0e0e0",
-  fontSize: "0.85rem",
-  cursor: "pointer",
-};
+export default i18n;
