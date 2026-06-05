@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { register } from "../api/auth";
 import { useAuth } from "../context/AuthContext";
+import { useTranslation } from "react-i18next";
 
 export default function RegisterPage() {
   const [form, setForm] = useState({
@@ -15,6 +16,7 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const { loginUser } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -29,7 +31,7 @@ export default function RegisterPage() {
       loginUser(res.data);
       navigate("/");
     } catch (err) {
-      setError(err.response?.data?.message || "Kayıt başarısız");
+      setError(err.response?.data?.message || t("auth.register_failed"));
     } finally {
       setLoading(false);
     }
@@ -65,7 +67,7 @@ export default function RegisterPage() {
             textAlign: "center",
           }}
         >
-          Kayıt Ol
+          {t("auth.register_title")}
         </h1>
         <p
           style={{
@@ -75,12 +77,12 @@ export default function RegisterPage() {
             fontSize: "0.9rem",
           }}
         >
-          Zaten hesabın var mı?{" "}
+          {t("auth.have_account")}{" "}
           <Link
             to="/login"
             style={{ color: "#E8C547", textDecoration: "none" }}
           >
-            Giriş yap
+            {t("auth.login_link")}
           </Link>
         </p>
 
@@ -105,40 +107,40 @@ export default function RegisterPage() {
           style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
         >
           <div>
-            <label style={labelStyle}>Kullanıcı Adı *</label>
+            <label style={labelStyle}>{t("auth.username")}</label>
             <input
               name="username"
               value={form.username}
               onChange={handleChange}
               required
               style={inputStyle}
-              placeholder="kullaniciadi"
+              placeholder={t("auth.username_placeholder")}
             />
           </div>
           <div style={{ display: "flex", gap: "1rem" }}>
             <div style={{ flex: 1 }}>
-              <label style={labelStyle}>Ad</label>
+              <label style={labelStyle}>{t("auth.first_name")}</label>
               <input
                 name="firstName"
                 value={form.firstName}
                 onChange={handleChange}
                 style={inputStyle}
-                placeholder="Adın"
+                placeholder={t("auth.first_name_placeholder")}
               />
             </div>
             <div style={{ flex: 1 }}>
-              <label style={labelStyle}>Soyad</label>
+              <label style={labelStyle}>{t("auth.last_name")}</label>
               <input
                 name="lastName"
                 value={form.lastName}
                 onChange={handleChange}
                 style={inputStyle}
-                placeholder="Soyadın"
+                placeholder={t("auth.last_name_placeholder")}
               />
             </div>
           </div>
           <div>
-            <label style={labelStyle}>E-posta *</label>
+            <label style={labelStyle}>{t("auth.email")}</label>
             <input
               name="email"
               type="email"
@@ -146,11 +148,11 @@ export default function RegisterPage() {
               onChange={handleChange}
               required
               style={inputStyle}
-              placeholder="ornek@mail.com"
+              placeholder={t("auth.email_placeholder")}
             />
           </div>
           <div>
-            <label style={labelStyle}>Şifre *</label>
+            <label style={labelStyle}>{t("auth.password")}</label>
             <input
               name="password"
               type="password"
@@ -177,7 +179,7 @@ export default function RegisterPage() {
               opacity: loading ? 0.7 : 1,
             }}
           >
-            {loading ? "Kayıt yapılıyor..." : "Kayıt Ol"}
+            {loading ? t("auth.registering") : t("auth.register_btn")}
           </button>
         </form>
       </div>
