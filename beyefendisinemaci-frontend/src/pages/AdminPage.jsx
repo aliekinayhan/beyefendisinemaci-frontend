@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { searchTmdb } from "../api/tmdb";
 import {
   createMovie,
@@ -93,10 +93,6 @@ function FilmlerTab() {
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState({ message: null, type: "success" });
   const [mode, setMode] = useState("list");
-
-  useEffect(() => {
-    searchMovies("").then((res) => setMovieResults(res.data));
-  }, []);
 
   const showToast = (message, type = "success") => {
     setToast({ message, type });
@@ -447,7 +443,7 @@ function FilmlerTab() {
               </div>
             )}
             {movieResults.length === 0 && (
-              <p style={{ color: "#666" }}>Film bulunamadı.</p>
+              <p style={{ color: "#666" }}>Henüz arama yapılmadı.</p>
             )}
           </div>
         </>
@@ -656,12 +652,6 @@ function KullanicilarTab() {
   const [users, setUsers] = useState([]);
   const [toast, setToast] = useState({ message: null, type: "success" });
 
-  useEffect(() => {
-    import("../api/users").then(({ searchUsers }) => {
-      searchUsers("").then((res) => setUsers(res.data));
-    });
-  }, []);
-
   const showToast = (message, type = "success") => {
     setToast({ message, type });
     setTimeout(() => setToast({ message: null, type: "success" }), 3000);
@@ -734,7 +724,7 @@ function KullanicilarTab() {
           </button>
         </form>
         {users.length === 0 ? (
-          <p style={{ color: "#666" }}>Kullanıcı bulunamadı.</p>
+          <p style={{ color: "#666" }}>Henüz arama yapılmadı.</p>
         ) : (
           <div
             style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
