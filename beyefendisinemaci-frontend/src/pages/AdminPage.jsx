@@ -94,6 +94,10 @@ function FilmlerTab() {
   const [toast, setToast] = useState({ message: null, type: "success" });
   const [mode, setMode] = useState("list");
 
+  useEffect(() => {
+    searchMovies("").then((res) => setMovieResults(res.data));
+  }, []);
+
   const showToast = (message, type = "success") => {
     setToast({ message, type });
     setTimeout(() => setToast({ message: null, type: "success" }), 3000);
@@ -112,7 +116,6 @@ function FilmlerTab() {
 
   const handleMovieSearch = async (e) => {
     e.preventDefault();
-    if (!movieQuery.trim()) return;
     try {
       const res = await searchMovies(movieQuery);
       setMovieResults(res.data);
@@ -210,6 +213,8 @@ function FilmlerTab() {
       showToast("Film eklendi.");
       setSelectedMovie(null);
       setMode("list");
+      const res = await searchMovies("");
+      setMovieResults(res.data);
     } catch (err) {
       showToast(err.response?.data?.message || "Film eklenemedi.", "error");
     } finally {
@@ -235,10 +240,8 @@ function FilmlerTab() {
       showToast("Film güncellendi.");
       setEditingMovie(null);
       setMode("list");
-      if (movieQuery.trim()) {
-        const res = await searchMovies(movieQuery);
-        setMovieResults(res.data);
-      }
+      const res = await searchMovies(movieQuery);
+      setMovieResults(res.data);
     } catch (err) {
       showToast(err.response?.data?.message || "Film güncellenemedi.", "error");
     } finally {
@@ -443,7 +446,7 @@ function FilmlerTab() {
                 ))}
               </div>
             )}
-            {movieResults.length === 0 && movieQuery && (
+            {movieResults.length === 0 && (
               <p style={{ color: "#666" }}>Film bulunamadı.</p>
             )}
           </div>
@@ -653,6 +656,12 @@ function KullanicilarTab() {
   const [users, setUsers] = useState([]);
   const [toast, setToast] = useState({ message: null, type: "success" });
 
+  useEffect(() => {
+    import("../api/users").then(({ searchUsers }) => {
+      searchUsers("").then((res) => setUsers(res.data));
+    });
+  }, []);
+
   const showToast = (message, type = "success") => {
     setToast({ message, type });
     setTimeout(() => setToast({ message: null, type: "success" }), 3000);
@@ -660,7 +669,6 @@ function KullanicilarTab() {
 
   const handleSearch = async (e) => {
     e.preventDefault();
-    if (!query.trim()) return;
     try {
       const { searchUsers } = await import("../api/users");
       const res = await searchUsers(query);
@@ -726,7 +734,7 @@ function KullanicilarTab() {
           </button>
         </form>
         {users.length === 0 ? (
-          <p style={{ color: "#666" }}>Henüz arama yapılmadı.</p>
+          <p style={{ color: "#666" }}>Kullanıcı bulunamadı.</p>
         ) : (
           <div
             style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
