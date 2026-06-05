@@ -15,6 +15,13 @@ const resources = {
         admin: "Admin Panel",
         settings: "Settings",
       },
+      home: {
+        subtitle: "Original reviews on cinema",
+        recent: "Recently Added",
+        all_movies: "All Movies →",
+        loading: "Loading...",
+        no_movies: "No movies added yet.",
+      },
       movie: {
         in_list: "✓ Listed",
         add_list: "+ List",
@@ -102,6 +109,13 @@ const resources = {
         profile: "Profil",
         admin: "Admin Paneli",
         settings: "Ayarlar",
+      },
+      home: {
+        subtitle: "Sinema üzerine özgün incelemeler",
+        recent: "Son Eklenenler",
+        all_movies: "Tüm Filmler →",
+        loading: "Yükleniyor...",
+        no_movies: "Henüz film eklenmemiş.",
       },
       movie: {
         in_list: "✓ Listede",

@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getRecentMovies } from "../api/movies";
 import MovieCard from "../components/MovieCard";
+import { useTranslation } from "react-i18next";
 
 export default function HomePage() {
   const [movies, setMovies] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { t } = useTranslation();
 
   useEffect(() => {
     getRecentMovies()
@@ -33,7 +35,7 @@ export default function HomePage() {
             Beyefendi Sinemacı
           </h1>
           <p style={{ color: "#666", fontSize: "1rem", margin: 0 }}>
-            Sinema üzerine özgün incelemeler
+            {t("home.subtitle")}
           </p>
         </div>
 
@@ -54,7 +56,7 @@ export default function HomePage() {
               margin: 0,
             }}
           >
-            Son Eklenenler
+            {t("home.recent")}
           </h2>
           <Link
             to="/movies"
@@ -67,17 +69,17 @@ export default function HomePage() {
               textDecoration: "none",
             }}
           >
-            Tüm Filmler →
+            {t("home.all_movies")}
           </Link>
         </div>
 
         {loading ? (
           <div style={{ color: "#666", textAlign: "center", padding: "4rem" }}>
-            Yükleniyor...
+            {t("home.loading")}
           </div>
         ) : movies.length === 0 ? (
           <div style={{ color: "#666", textAlign: "center", padding: "4rem" }}>
-            Henüz film eklenmemiş.
+            {t("home.no_movies")}
           </div>
         ) : (
           <div
