@@ -85,6 +85,7 @@ function FilmlerTab() {
   const [movieSearched, setMovieSearched] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [editingMovie, setEditingMovie] = useState(null);
+  const [title, setTitle] = useState("");
   const [review, setReview] = useState("");
   const [shortVideoUrl, setShortVideoUrl] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
@@ -139,6 +140,7 @@ function FilmlerTab() {
 
   const handleEdit = (movie) => {
     setEditingMovie(movie);
+    setTitle(movie.title || "");
     setReview(movie.review || "");
     setShortVideoUrl(movie.shortVideoUrl || "");
     setVideoUrl(movie.videoUrl || "");
@@ -231,7 +233,7 @@ function FilmlerTab() {
     setLoading(true);
     try {
       await updateMovie(editingMovie.id, {
-        title: editingMovie.title,
+        title: title,
         tmdbId: editingMovie.tmdbId,
         releaseYear: releaseYear ? parseInt(releaseYear) : null,
         genre: genre || null,
@@ -539,13 +541,17 @@ function FilmlerTab() {
               <div style={{ flex: 1 }}>
                 <label style={labelStyle}>İngilizce İsim *</label>
                 <input
-                  value={
-                    mode === "add"
-                      ? selectedMovie?.title || ""
-                      : editingMovie?.title || ""
+                  value={mode === "add" ? selectedMovie?.title || "" : title}
+                  onChange={
+                    mode === "edit"
+                      ? (e) => setTitle(e.target.value)
+                      : undefined
                   }
-                  readOnly
-                  style={{ ...inputStyle, color: "#666" }}
+                  readOnly={mode === "add"}
+                  style={{
+                    ...inputStyle,
+                    color: mode === "add" ? "#666" : "#e0e0e0",
+                  }}
                 />
               </div>
               <div style={{ flex: 1 }}>
