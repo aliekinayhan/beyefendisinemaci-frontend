@@ -3,11 +3,14 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { logout } from "../api/auth";
 import DefaultAvatar from "./DefaultAvatar";
+import LanguageSwitcher from "./LanguageSwitcher";
+import { useTranslation } from "react-i18next";
 
 export default function Navbar() {
   const { token, user, logoutUser, isAdmin } = useAuth();
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const { t } = useTranslation();
 
   const handleLogout = async () => {
     try {
@@ -51,14 +54,14 @@ export default function Navbar() {
 
       <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
         <Link to="/movies" style={linkStyle}>
-          Filmler
+          {t("nav.movies")}
         </Link>
 
         {token ? (
           <>
             {isAdmin && (
               <Link to="/admin" style={{ ...linkStyle, color: "#C62A2A" }}>
-                Admin
+                {t("nav.admin")}
               </Link>
             )}
             <div style={{ position: "relative" }}>
@@ -111,7 +114,7 @@ export default function Navbar() {
                       borderBottom: "1px solid #1a1a2e",
                     }}
                   >
-                    Profilim
+                    {t("nav.profile")}
                   </Link>
                   <Link
                     to="/settings"
@@ -125,7 +128,7 @@ export default function Navbar() {
                       borderBottom: "1px solid #1a1a2e",
                     }}
                   >
-                    Ayarlar
+                    {t("nav.settings")}
                   </Link>
                   <button
                     onClick={handleLogout}
@@ -141,7 +144,7 @@ export default function Navbar() {
                       cursor: "pointer",
                     }}
                   >
-                    Çıkış Yap
+                    {t("nav.logout")}
                   </button>
                 </div>
               )}
@@ -150,7 +153,7 @@ export default function Navbar() {
         ) : (
           <>
             <Link to="/login" style={linkStyle}>
-              Giriş
+              {t("nav.login")}
             </Link>
             <Link
               to="/register"
@@ -163,10 +166,11 @@ export default function Navbar() {
                 fontWeight: 600,
               }}
             >
-              Kayıt Ol
+              {t("nav.register")}
             </Link>
           </>
         )}
+        <LanguageSwitcher />
       </div>
     </nav>
   );
