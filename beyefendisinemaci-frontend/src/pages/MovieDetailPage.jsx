@@ -315,35 +315,33 @@ export default function MovieDetailPage() {
                       alignItems: "flex-start",
                     }}
                   >
-                    <div
+                    <Link
+                      to={`/profile/${comment.userId}`}
                       style={{
                         display: "flex",
                         alignItems: "center",
                         gap: "0.75rem",
                         marginBottom: "0.5rem",
+                        textDecoration: "none",
                       }}
                     >
-                      <Link
-                        to={`/profile/${comment.userId}`}
-                        style={{ flexShrink: 0 }}
-                      >
-                        {comment.userProfilePhoto ? (
-                          <img
-                            src={comment.userProfilePhoto}
-                            alt={comment.username}
-                            style={{
-                              width: "36px",
-                              height: "36px",
-                              borderRadius: "50%",
-                              objectFit: "cover",
-                              border: "1px solid #2a2a3e",
-                              cursor: "pointer",
-                            }}
-                          />
-                        ) : (
-                          <DefaultAvatar size={36} />
-                        )}
-                      </Link>
+                      {comment.userProfilePhoto ? (
+                        <img
+                          src={comment.userProfilePhoto}
+                          alt={comment.username}
+                          style={{
+                            width: "36px",
+                            height: "36px",
+                            borderRadius: "50%",
+                            objectFit: "cover",
+                            border: "1px solid #2a2a3e",
+                            cursor: "pointer",
+                            flexShrink: 0,
+                          }}
+                        />
+                      ) : (
+                        <DefaultAvatar size={36} />
+                      )}
                       <span
                         style={{
                           color: "#E8C547",
@@ -353,7 +351,7 @@ export default function MovieDetailPage() {
                       >
                         {comment.username}
                       </span>
-                    </div>
+                    </Link>
                     {token &&
                       (isAdmin || user?.id === comment.userId?.toString()) && (
                         <button
