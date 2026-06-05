@@ -82,6 +82,7 @@ function FilmlerTab() {
   const [tmdbResults, setTmdbResults] = useState([]);
   const [movieQuery, setMovieQuery] = useState("");
   const [movieResults, setMovieResults] = useState([]);
+  const [movieSearched, setMovieSearched] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [editingMovie, setEditingMovie] = useState(null);
   const [review, setReview] = useState("");
@@ -115,6 +116,7 @@ function FilmlerTab() {
     try {
       const res = await searchMovies(movieQuery);
       setMovieResults(res.data);
+      setMovieSearched(true);
     } catch (err) {
       showToast("Film arama başarısız.", "error");
     }
@@ -211,6 +213,7 @@ function FilmlerTab() {
       setMode("list");
       const res = await searchMovies("");
       setMovieResults(res.data);
+      setMovieSearched(true);
     } catch (err) {
       showToast(err.response?.data?.message || "Film eklenemedi.", "error");
     } finally {
@@ -238,6 +241,7 @@ function FilmlerTab() {
       setMode("list");
       const res = await searchMovies(movieQuery);
       setMovieResults(res.data);
+      setMovieSearched(true);
     } catch (err) {
       showToast(err.response?.data?.message || "Film güncellenemedi.", "error");
     } finally {
@@ -351,7 +355,7 @@ function FilmlerTab() {
                 Ara
               </button>
             </form>
-            {movieResults.length > 0 && (
+            {movieResults.length > 0 ? (
               <div
                 style={{
                   display: "flex",
@@ -441,9 +445,10 @@ function FilmlerTab() {
                   </div>
                 ))}
               </div>
-            )}
-            {movieResults.length === 0 && (
-              <p style={{ color: "#666" }}>Henüz arama yapılmadı.</p>
+            ) : (
+              <p style={{ color: "#666" }}>
+                {movieSearched ? "Film bulunamadı." : "Henüz arama yapılmadı."}
+              </p>
             )}
           </div>
         </>
@@ -650,6 +655,7 @@ function FilmlerTab() {
 function KullanicilarTab() {
   const [query, setQuery] = useState("");
   const [users, setUsers] = useState([]);
+  const [userSearched, setUserSearched] = useState(false);
   const [toast, setToast] = useState({ message: null, type: "success" });
 
   const showToast = (message, type = "success") => {
@@ -663,6 +669,7 @@ function KullanicilarTab() {
       const { searchUsers } = await import("../api/users");
       const res = await searchUsers(query);
       setUsers(res.data);
+      setUserSearched(true);
     } catch (err) {
       showToast("Arama başarısız.", "error");
     }
@@ -723,9 +730,7 @@ function KullanicilarTab() {
             Ara
           </button>
         </form>
-        {users.length === 0 ? (
-          <p style={{ color: "#666" }}>Henüz arama yapılmadı.</p>
-        ) : (
+        {users.length > 0 ? (
           <div
             style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
           >
@@ -813,6 +818,10 @@ function KullanicilarTab() {
               </div>
             ))}
           </div>
+        ) : (
+          <p style={{ color: "#666" }}>
+            {userSearched ? "Kullanıcı bulunamadı." : "Henüz arama yapılmadı."}
+          </p>
         )}
       </div>
     </div>
