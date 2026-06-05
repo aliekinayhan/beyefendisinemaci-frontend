@@ -12,7 +12,7 @@ import {
   uploadProfilePhoto,
 } from "../api/s3";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Toast from "../components/Toast";
 import DefaultAvatar from "../components/DefaultAvatar";
 
@@ -377,11 +377,15 @@ function FilmlerTab() {
                       gap: "1rem",
                     }}
                   >
-                    <div
+                    <Link
+                      to={`/movies/${movie.id}`}
                       style={{
                         display: "flex",
                         alignItems: "center",
                         gap: "0.75rem",
+                        textDecoration: "none",
+                        flex: 1,
+                        minWidth: 0,
                       }}
                     >
                       <img
@@ -395,6 +399,7 @@ function FilmlerTab() {
                           height: "60px",
                           objectFit: "cover",
                           borderRadius: "4px",
+                          flexShrink: 0,
                         }}
                       />
                       <div>
@@ -419,8 +424,10 @@ function FilmlerTab() {
                           {movie.releaseYear && `· ${movie.releaseYear}`}
                         </p>
                       </div>
-                    </div>
-                    <div style={{ display: "flex", gap: "0.5rem" }}>
+                    </Link>
+                    <div
+                      style={{ display: "flex", gap: "0.5rem", flexShrink: 0 }}
+                    >
                       <button
                         onClick={() => handleEdit(movie)}
                         style={{
@@ -748,8 +755,16 @@ function KullanicilarTab() {
                   gap: "1rem",
                 }}
               >
-                <div
-                  style={{ display: "flex", alignItems: "center", gap: "1rem" }}
+                <Link
+                  to={`/profile/${user.id}`}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "1rem",
+                    textDecoration: "none",
+                    flex: 1,
+                    minWidth: 0,
+                  }}
                 >
                   {user.profilePhoto ? (
                     <img
@@ -760,6 +775,7 @@ function KullanicilarTab() {
                         height: "40px",
                         borderRadius: "50%",
                         objectFit: "cover",
+                        flexShrink: 0,
                       }}
                     />
                   ) : (
@@ -780,9 +796,14 @@ function KullanicilarTab() {
                       {user.role}
                     </p>
                   </div>
-                </div>
+                </Link>
                 <div
-                  style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}
+                  style={{
+                    display: "flex",
+                    gap: "0.5rem",
+                    flexWrap: "wrap",
+                    flexShrink: 0,
+                  }}
                 >
                   <button
                     onClick={() => handleFreeze(user.id)}
