@@ -323,53 +323,105 @@ export default function ProfilePage() {
                       border: "1px solid #1a1a2e",
                       borderRadius: "8px",
                       padding: "1rem",
+                      display: "flex",
+                      gap: "1rem",
+                      alignItems: "flex-start",
                     }}
                   >
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "flex-start",
-                        marginBottom: "0.5rem",
-                      }}
-                    >
-                      <p
+                    {comment.moviePosterUrl ? (
+                      <img
+                        src={comment.moviePosterUrl}
+                        alt={comment.movieTitle}
                         style={{
-                          color: "#E8C547",
-                          fontSize: "0.8rem",
-                          margin: 0,
+                          width: "50px",
+                          height: "75px",
+                          objectFit: "cover",
+                          borderRadius: "4px",
+                          flexShrink: 0,
+                        }}
+                      />
+                    ) : (
+                      <div
+                        style={{
+                          width: "50px",
+                          height: "75px",
+                          background: "#1a1a2e",
+                          borderRadius: "4px",
+                          flexShrink: 0,
+                        }}
+                      />
+                    )}
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "flex-start",
+                          marginBottom: "0.4rem",
                         }}
                       >
-                        Film sayfasına git →
+                        <div>
+                          <p
+                            style={{
+                              color: "#E8C547",
+                              fontSize: "0.85rem",
+                              margin: "0 0 0.2rem",
+                              fontWeight: 600,
+                            }}
+                          >
+                            {comment.movieTitle}
+                          </p>
+                          <p
+                            style={{
+                              color: "#555",
+                              fontSize: "0.75rem",
+                              margin: 0,
+                            }}
+                          >
+                            {new Date(comment.createdAt).toLocaleDateString(
+                              "tr-TR",
+                              {
+                                day: "numeric",
+                                month: "long",
+                                year: "numeric",
+                              },
+                            )}
+                          </p>
+                        </div>
+                        {(isOwner || isAdmin) && (
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleDeleteComment(comment.id);
+                            }}
+                            style={{
+                              background: "transparent",
+                              border: "none",
+                              color: "#C62A2A",
+                              cursor: "pointer",
+                              fontSize: "0.8rem",
+                              flexShrink: 0,
+                            }}
+                          >
+                            Sil
+                          </button>
+                        )}
+                      </div>
+                      <p
+                        style={{
+                          color: "#ccc",
+                          fontSize: "0.9rem",
+                          margin: 0,
+                          lineHeight: 1.6,
+                          overflow: "hidden",
+                          display: "-webkit-box",
+                          WebkitLineClamp: 3,
+                          WebkitBoxOrient: "vertical",
+                        }}
+                      >
+                        {comment.content}
                       </p>
-                      {(isOwner || isAdmin) && (
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleDeleteComment(comment.id);
-                          }}
-                          style={{
-                            background: "transparent",
-                            border: "none",
-                            color: "#C62A2A",
-                            cursor: "pointer",
-                            fontSize: "0.8rem",
-                          }}
-                        >
-                          Sil
-                        </button>
-                      )}
                     </div>
-                    <p
-                      style={{
-                        color: "#ccc",
-                        fontSize: "0.9rem",
-                        margin: 0,
-                        lineHeight: 1.6,
-                      }}
-                    >
-                      {comment.content}
-                    </p>
                   </div>
                 </Link>
               ))
