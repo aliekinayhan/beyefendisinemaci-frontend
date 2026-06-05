@@ -91,6 +91,7 @@ function FilmlerTab() {
   const [posterUrl, setPosterUrl] = useState("");
   const [genre, setGenre] = useState("");
   const [releaseYear, setReleaseYear] = useState("");
+  const [originalTitle, setOriginalTitle] = useState("");
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState({ message: null, type: "success" });
   const [mode, setMode] = useState("list");
@@ -130,6 +131,7 @@ function FilmlerTab() {
     setPosterUrl(movie.posterUrl || "");
     setGenre("");
     setReleaseYear(movie.releaseYear || "");
+    setOriginalTitle(movie.originalTitle || "");
     setTmdbResults([]);
     setTmdbQuery("");
     setMode("add");
@@ -143,6 +145,7 @@ function FilmlerTab() {
     setPosterUrl(movie.posterUrl || "");
     setGenre(movie.genre || "");
     setReleaseYear(movie.releaseYear || "");
+    setOriginalTitle(movie.originalTitle || "");
     setMode("edit");
   };
 
@@ -207,6 +210,7 @@ function FilmlerTab() {
         review,
         shortVideoUrl: shortVideoUrl || null,
         videoUrl: videoUrl || null,
+        originalTitle: originalTitle || null,
       });
       showToast("Film eklendi.");
       setSelectedMovie(null);
@@ -235,6 +239,7 @@ function FilmlerTab() {
         review,
         shortVideoUrl: shortVideoUrl || null,
         videoUrl: videoUrl || null,
+        originalTitle: originalTitle || null,
       });
       showToast("Film güncellendi.");
       setEditingMovie(null);
@@ -527,6 +532,30 @@ function FilmlerTab() {
                     style={{ display: "none" }}
                   />
                 </label>
+              </div>
+            </div>
+
+            <div style={{ display: "flex", gap: "1rem" }}>
+              <div style={{ flex: 1 }}>
+                <label style={labelStyle}>İngilizce İsim *</label>
+                <input
+                  value={
+                    mode === "add"
+                      ? selectedMovie?.title || ""
+                      : editingMovie?.title || ""
+                  }
+                  readOnly
+                  style={{ ...inputStyle, color: "#666" }}
+                />
+              </div>
+              <div style={{ flex: 1 }}>
+                <label style={labelStyle}>Orijinal İsim</label>
+                <input
+                  value={originalTitle}
+                  onChange={(e) => setOriginalTitle(e.target.value)}
+                  placeholder="Orijinal dildeki isim..."
+                  style={inputStyle}
+                />
               </div>
             </div>
 
