@@ -24,6 +24,7 @@ export default function SettingsPage() {
   const [passwordForm, setPasswordForm] = useState({
     oldPassword: "",
     newPassword: "",
+    confirmPassword: "",
   });
   const [deleteForm, setDeleteForm] = useState({ password: "" });
   const [loading, setLoading] = useState(true);
@@ -112,9 +113,20 @@ export default function SettingsPage() {
 
   const handlePasswordChange = async (e) => {
     e.preventDefault();
+    if (passwordForm.newPassword !== passwordForm.confirmPassword) {
+      showToast(t("settings.passwords_not_match"), "error");
+      return;
+    }
     try {
-      await changePassword(passwordForm);
-      setPasswordForm({ oldPassword: "", newPassword: "" });
+      await changePassword({
+        oldPassword: passwordForm.oldPassword,
+        newPassword: passwordForm.newPassword,
+      });
+      setPasswordForm({
+        oldPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
       showToast(t("settings.password_updated"));
     } catch (err) {
       showToast(
@@ -337,6 +349,42 @@ export default function SettingsPage() {
                 required
                 style={inputStyle}
               />
+            </div>
+            <div>
+              <label style={labelStyle}>
+                {t("settings.confirm_new_password")}
+              </label>
+              <input
+                type="password"
+                value={passwordForm.confirmPassword}
+                onChange={(e) =>
+                  setPasswordForm({
+                    ...passwordForm,
+                    confirmPassword: e.target.value,
+                  })
+                }
+                required
+                style={{
+                  ...inputStyle,
+                  borderColor:
+                    passwordForm.confirmPassword &&
+                    passwordForm.newPassword !== passwordForm.confirmPassword
+                      ? "#C62A2A"
+                      : "#2a2a3e",
+                }}
+              />
+              {passwordForm.confirmPassword &&
+                passwordForm.newPassword !== passwordForm.confirmPassword && (
+                  <p
+                    style={{
+                      color: "#C62A2A",
+                      fontSize: "0.8rem",
+                      margin: "0.3rem 0 0",
+                    }}
+                  >
+                    {t("settings.passwords_not_match")}
+                  </p>
+                )}
             </div>
             <button type="submit" style={saveButtonStyle}>
               {t("settings.update_password")}
