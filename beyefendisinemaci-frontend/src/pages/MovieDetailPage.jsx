@@ -184,7 +184,14 @@ export default function MovieDetailPage() {
             >
               {movie.genre} {movie.releaseYear && `· ${movie.releaseYear}`}
             </p>
-            <p style={{ color: "#ccc", lineHeight: 1.7, fontSize: "0.95rem" }}>
+            <p
+              style={{
+                color: "#ccc",
+                lineHeight: 1.7,
+                fontSize: "0.95rem",
+                whiteSpace: "pre-wrap",
+              }}
+            >
               {movie.review}
             </p>
           </div>
