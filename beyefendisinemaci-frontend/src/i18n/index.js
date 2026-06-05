@@ -13,6 +13,7 @@ const resources = {
         logout: "Logout",
         profile: "Profile",
         admin: "Admin Panel",
+        settings: "Settings",
       },
       common: {
         loading: "Loading...",
@@ -36,6 +37,7 @@ const resources = {
         logout: "Çıkış Yap",
         profile: "Profil",
         admin: "Admin Paneli",
+        settings: "Ayarlar",
       },
       common: {
         loading: "Yükleniyor...",
