@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { login } from "../api/auth";
 import { useAuth } from "../context/AuthContext";
+import { useTranslation } from "react-i18next";
 
 export default function LoginPage() {
   const [form, setForm] = useState({ username: "", password: "" });
@@ -9,6 +10,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const { loginUser } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -23,7 +25,7 @@ export default function LoginPage() {
       loginUser(res.data);
       navigate("/");
     } catch (err) {
-      setError(err.response?.data?.message || "Giriş başarısız");
+      setError(err.response?.data?.message || t("auth.login_failed"));
     } finally {
       setLoading(false);
     }
@@ -58,7 +60,7 @@ export default function LoginPage() {
             textAlign: "center",
           }}
         >
-          Giriş Yap
+          {t("auth.login_title")}
         </h1>
         <p
           style={{
@@ -68,12 +70,12 @@ export default function LoginPage() {
             fontSize: "0.9rem",
           }}
         >
-          Hesabın yok mu?{" "}
+          {t("auth.no_account")}{" "}
           <Link
             to="/register"
             style={{ color: "#E8C547", textDecoration: "none" }}
           >
-            Kayıt ol
+            {t("auth.register_link")}
           </Link>
         </p>
 
@@ -98,18 +100,18 @@ export default function LoginPage() {
           style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
         >
           <div>
-            <label style={labelStyle}>Kullanıcı Adı</label>
+            <label style={labelStyle}>{t("auth.username")}</label>
             <input
               name="username"
               value={form.username}
               onChange={handleChange}
               required
               style={inputStyle}
-              placeholder="kullaniciadi"
+              placeholder={t("auth.username_placeholder")}
             />
           </div>
           <div>
-            <label style={labelStyle}>Şifre</label>
+            <label style={labelStyle}>{t("auth.password")}</label>
             <input
               name="password"
               type="password"
@@ -136,7 +138,7 @@ export default function LoginPage() {
               opacity: loading ? 0.7 : 1,
             }}
           >
-            {loading ? "Giriş yapılıyor..." : "Giriş Yap"}
+            {loading ? t("auth.logging_in") : t("auth.login_btn")}
           </button>
         </form>
       </div>
