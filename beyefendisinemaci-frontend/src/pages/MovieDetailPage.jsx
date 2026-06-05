@@ -170,11 +170,23 @@ export default function MovieDetailPage() {
                 color: "#E8C547",
                 fontFamily: "'Playfair Display', serif",
                 fontSize: "2rem",
-                margin: "0 0 0.5rem",
+                margin: "0 0 0.25rem",
               }}
             >
               {movie.title}
             </h1>
+            {movie.originalTitle && movie.originalTitle !== movie.title && (
+              <p
+                style={{
+                  color: "#888",
+                  fontSize: "0.9rem",
+                  fontStyle: "italic",
+                  margin: "0 0 0.5rem",
+                }}
+              >
+                {movie.originalTitle}
+              </p>
+            )}
             <p
               style={{
                 color: "#666",
