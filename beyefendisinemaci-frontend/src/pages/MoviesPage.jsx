@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { getMovies, searchMovies } from "../api/movies";
 import MovieCard from "../components/MovieCard";
 import { useAuth } from "../context/AuthContext";
+import { useTranslation } from "react-i18next";
 
 export default function MoviesPage() {
   const { token } = useAuth();
@@ -11,6 +12,7 @@ export default function MoviesPage() {
   const [totalPages, setTotalPages] = useState(0);
   const [query, setQuery] = useState("");
   const [searching, setSearching] = useState(false);
+  const { t } = useTranslation();
 
   const fetchMovies = async (pageNum = 0) => {
     setLoading(true);
@@ -62,7 +64,7 @@ export default function MoviesPage() {
             margin: "0 0 2rem",
           }}
         >
-          Tüm Filmler
+          {t("movies.title")}
         </h1>
 
         <form
@@ -78,7 +80,7 @@ export default function MoviesPage() {
                 fetchMovies(0);
               }
             }}
-            placeholder="Film ara..."
+            placeholder={t("movies.search_placeholder")}
             style={{
               flex: 1,
               background: "#111118",
@@ -102,17 +104,17 @@ export default function MoviesPage() {
               cursor: "pointer",
             }}
           >
-            Ara
+            {t("movies.search_btn")}
           </button>
         </form>
 
         {loading ? (
           <div style={{ color: "#666", textAlign: "center", padding: "4rem" }}>
-            Yükleniyor...
+            {t("movies.loading")}
           </div>
         ) : movies.length === 0 ? (
           <div style={{ color: "#666", textAlign: "center", padding: "4rem" }}>
-            Film bulunamadı.
+            {t("movies.not_found")}
           </div>
         ) : (
           <div
@@ -142,7 +144,7 @@ export default function MoviesPage() {
               disabled={page === 0}
               style={pageButtonStyle(page === 0)}
             >
-              ← Önceki
+              {t("movies.prev")}
             </button>
             <span
               style={{
@@ -158,7 +160,7 @@ export default function MoviesPage() {
               disabled={page === totalPages - 1}
               style={pageButtonStyle(page === totalPages - 1)}
             >
-              Sonraki →
+              {t("movies.next")}
             </button>
           </div>
         )}

@@ -45,6 +45,15 @@ const resources = {
         no_comments: "No comments yet.",
         delete_comment: "Delete",
       },
+      movies: {
+        title: "All Movies",
+        search_placeholder: "Search movies...",
+        search_btn: "Search",
+        loading: "Loading...",
+        not_found: "No movies found.",
+        prev: "← Previous",
+        next: "Next →",
+      },
       admin: {
         title: "Admin Panel",
         tabs_movies: "Movies",
@@ -158,6 +167,15 @@ const resources = {
         comment_btn: "Yorum Yap",
         no_comments: "Henüz yorum yok.",
         delete_comment: "Sil",
+      },
+      movies: {
+        title: "Tüm Filmler",
+        search_placeholder: "Film ara...",
+        search_btn: "Ara",
+        loading: "Yükleniyor...",
+        not_found: "Film bulunamadı.",
+        prev: "← Önceki",
+        next: "Sonraki →",
       },
       admin: {
         title: "Admin Paneli",
