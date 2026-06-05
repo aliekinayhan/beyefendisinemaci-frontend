@@ -14,7 +14,7 @@ export default function MovieDetailPage() {
   const [commentText, setCommentText] = useState("");
   const [loading, setLoading] = useState(true);
   const [shortVideoOpen, setShortVideoOpen] = useState(false);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -356,15 +356,30 @@ export default function MovieDetailPage() {
                       ) : (
                         <DefaultAvatar size={36} />
                       )}
-                      <span
-                        style={{
-                          color: "#E8C547",
-                          fontSize: "0.85rem",
-                          fontWeight: 600,
-                        }}
-                      >
-                        {comment.username}
-                      </span>
+                      <div>
+                        <span
+                          style={{
+                            color: "#E8C547",
+                            fontSize: "0.85rem",
+                            fontWeight: 600,
+                            display: "block",
+                          }}
+                        >
+                          {comment.username}
+                        </span>
+                        {comment.createdAt && (
+                          <span style={{ color: "#555", fontSize: "0.75rem" }}>
+                            {new Date(comment.createdAt).toLocaleDateString(
+                              i18n.language === "tr" ? "tr-TR" : "en-US",
+                              {
+                                day: "numeric",
+                                month: "long",
+                                year: "numeric",
+                              },
+                            )}
+                          </span>
+                        )}
+                      </div>
                     </Link>
                     {token &&
                       (isAdmin || user?.id === comment.userId?.toString()) && (
