@@ -4,6 +4,7 @@ import { getMovieById } from "../api/movies";
 import { getCommentsByMovie, addComment, deleteComment } from "../api/comments";
 import { useAuth } from "../context/AuthContext";
 import DefaultAvatar from "../components/DefaultAvatar";
+import { useTranslation } from "react-i18next";
 
 export default function MovieDetailPage() {
   const { id } = useParams();
@@ -13,6 +14,7 @@ export default function MovieDetailPage() {
   const [commentText, setCommentText] = useState("");
   const [loading, setLoading] = useState(true);
   const [shortVideoOpen, setShortVideoOpen] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchMovie = async () => {
@@ -72,7 +74,7 @@ export default function MovieDetailPage() {
           justifyContent: "center",
         }}
       >
-        <p style={{ color: "#666" }}>Yükleniyor...</p>
+        <p style={{ color: "#666" }}>{t("movie.loading")}</p>
       </div>
     );
 
@@ -87,7 +89,7 @@ export default function MovieDetailPage() {
           justifyContent: "center",
         }}
       >
-        <p style={{ color: "#666" }}>Film bulunamadı.</p>
+        <p style={{ color: "#666" }}>{t("movie.not_found")}</p>
       </div>
     );
 
@@ -245,7 +247,7 @@ export default function MovieDetailPage() {
                 marginBottom: "1rem",
               }}
             >
-              İnceleme Videosu
+              {t("movie.review_video")}
             </h2>
             <video
               src={movie.videoUrl}
@@ -263,7 +265,7 @@ export default function MovieDetailPage() {
               marginBottom: "1.5rem",
             }}
           >
-            Yorumlar
+            {t("movie.comments")}
           </h2>
 
           {token && (
@@ -271,7 +273,7 @@ export default function MovieDetailPage() {
               <textarea
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
-                placeholder="Yorumunuzu yazın..."
+                placeholder={t("movie.comment_placeholder")}
                 rows={3}
                 style={{
                   width: "100%",
@@ -299,13 +301,13 @@ export default function MovieDetailPage() {
                   marginTop: "0.5rem",
                 }}
               >
-                Yorum Yap
+                {t("movie.comment_btn")}
               </button>
             </form>
           )}
 
           {comments.length === 0 ? (
-            <p style={{ color: "#666" }}>Henüz yorum yok.</p>
+            <p style={{ color: "#666" }}>{t("movie.no_comments")}</p>
           ) : (
             <div
               style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
@@ -376,7 +378,7 @@ export default function MovieDetailPage() {
                             fontSize: "0.8rem",
                           }}
                         >
-                          Sil
+                          {t("movie.delete_comment")}
                         </button>
                       )}
                   </div>

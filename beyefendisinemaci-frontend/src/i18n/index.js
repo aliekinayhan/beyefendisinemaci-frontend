@@ -36,6 +36,14 @@ const resources = {
       movie: {
         in_list: "✓ Listed",
         add_list: "+ List",
+        loading: "Loading...",
+        not_found: "Movie not found.",
+        review_video: "Review Video",
+        comments: "Comments",
+        comment_placeholder: "Write your comment...",
+        comment_btn: "Comment",
+        no_comments: "No comments yet.",
+        delete_comment: "Delete",
       },
       admin: {
         title: "Admin Panel",
@@ -142,6 +150,14 @@ const resources = {
       movie: {
         in_list: "✓ Listede",
         add_list: "+ Liste",
+        loading: "Yükleniyor...",
+        not_found: "Film bulunamadı.",
+        review_video: "İnceleme Videosu",
+        comments: "Yorumlar",
+        comment_placeholder: "Yorumunuzu yazın...",
+        comment_btn: "Yorum Yap",
+        no_comments: "Henüz yorum yok.",
+        delete_comment: "Sil",
       },
       admin: {
         title: "Admin Paneli",
