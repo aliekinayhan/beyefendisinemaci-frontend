@@ -15,13 +15,15 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate, Link } from "react-router-dom";
 import Toast from "../components/Toast";
 import DefaultAvatar from "../components/DefaultAvatar";
+import { useTranslation } from "react-i18next";
 
-const TABS = ["Filmler", "Kullanıcılar"];
+const TABS = ["movies", "users"];
 
 export default function AdminPage() {
   const { isAdmin } = useAuth();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("Filmler");
+  const [activeTab, setActiveTab] = useState("movies");
+  const { t } = useTranslation();
 
   if (!isAdmin) {
     navigate("/");
@@ -39,7 +41,7 @@ export default function AdminPage() {
             margin: "0 0 2rem",
           }}
         >
-          Admin Paneli
+          {t("admin.title")}
         </h1>
         <div
           style={{
@@ -66,18 +68,21 @@ export default function AdminPage() {
                 fontWeight: activeTab === tab ? 600 : 400,
               }}
             >
-              {tab}
+              {tab === "movies"
+                ? t("admin.tabs_movies")
+                : t("admin.tabs_users")}
             </button>
           ))}
         </div>
-        {activeTab === "Filmler" && <FilmlerTab />}
-        {activeTab === "Kullanıcılar" && <KullanicilarTab />}
+        {activeTab === "movies" && <FilmlerTab />}
+        {activeTab === "users" && <KullanicilarTab />}
       </div>
     </div>
   );
 }
 
 function FilmlerTab() {
+  const { t } = useTranslation();
   const [tmdbQuery, setTmdbQuery] = useState("");
   const [tmdbResults, setTmdbResults] = useState([]);
   const [movieQuery, setMovieQuery] = useState("");
@@ -109,7 +114,7 @@ function FilmlerTab() {
       const res = await searchTmdb(tmdbQuery);
       setTmdbResults(res.data);
     } catch (err) {
-      showToast("Arama başarısız.", "error");
+      showToast(t("admin.search_failed"), "error");
     }
   };
 
@@ -120,7 +125,7 @@ function FilmlerTab() {
       setMovieResults(res.data);
       setMovieSearched(true);
     } catch (err) {
-      showToast("Film arama başarısız.", "error");
+      showToast(t("admin.search_failed"), "error");
     }
   };
 
@@ -152,13 +157,13 @@ function FilmlerTab() {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Bu filmi silmek istediğine emin misin?")) return;
+    if (!window.confirm(t("admin.confirm_delete_movie"))) return;
     try {
       await deleteMovie(id);
       setMovieResults(movieResults.filter((m) => m.id !== id));
-      showToast("Film silindi.");
+      showToast(t("admin.movie_deleted"));
     } catch (err) {
-      showToast("Film silinemedi.", "error");
+      showToast(t("admin.movie_delete_failed"), "error");
     }
   };
 
@@ -168,9 +173,9 @@ function FilmlerTab() {
     try {
       const res = await uploadProfilePhoto(file);
       setPosterUrl(res.data);
-      showToast("Poster yüklendi.");
+      showToast(t("admin.poster_uploaded"));
     } catch (err) {
-      showToast("Poster yüklenemedi.", "error");
+      showToast(t("admin.poster_failed"), "error");
     }
   };
 
@@ -180,9 +185,9 @@ function FilmlerTab() {
     try {
       const res = await uploadShortVideo(file);
       setShortVideoUrl(res.data);
-      showToast("Kısa video yüklendi.");
+      showToast(t("admin.short_video_uploaded"));
     } catch (err) {
-      showToast("Video yüklenemedi.", "error");
+      showToast(t("admin.long_video_failed"), "error");
     }
   };
 
@@ -192,9 +197,9 @@ function FilmlerTab() {
     try {
       const res = await uploadLongVideo(file);
       setVideoUrl(res.data);
-      showToast("Uzun video yüklendi.");
+      showToast(t("admin.long_video_uploaded"));
     } catch (err) {
-      showToast("Video yüklenemedi.", "error");
+      showToast(t("admin.long_video_failed"), "error");
     }
   };
 
@@ -214,14 +219,17 @@ function FilmlerTab() {
         videoUrl: videoUrl || null,
         originalTitle: originalTitle || null,
       });
-      showToast("Film eklendi.");
+      showToast(t("admin.movie_added"));
       setSelectedMovie(null);
       setMode("list");
       const res = await searchMovies("");
       setMovieResults(res.data);
       setMovieSearched(true);
     } catch (err) {
-      showToast(err.response?.data?.message || "Film eklenemedi.", "error");
+      showToast(
+        err.response?.data?.message || t("admin.movie_add_failed"),
+        "error",
+      );
     } finally {
       setLoading(false);
     }
@@ -243,14 +251,17 @@ function FilmlerTab() {
         videoUrl: videoUrl || null,
         originalTitle: originalTitle || null,
       });
-      showToast("Film güncellendi.");
+      showToast(t("admin.movie_updated"));
       setEditingMovie(null);
       setMode("list");
       const res = await searchMovies(movieQuery);
       setMovieResults(res.data);
       setMovieSearched(true);
     } catch (err) {
-      showToast(err.response?.data?.message || "Film güncellenemedi.", "error");
+      showToast(
+        err.response?.data?.message || t("admin.movie_update_failed"),
+        "error",
+      );
     } finally {
       setLoading(false);
     }
@@ -263,7 +274,7 @@ function FilmlerTab() {
       {mode === "list" && (
         <>
           <div style={cardStyle}>
-            <h2 style={sectionTitle}>TMDB'den Film Ekle</h2>
+            <h2 style={sectionTitle}>{t("admin.tmdb_title")}</h2>
             <form
               onSubmit={handleTmdbSearch}
               style={{ display: "flex", gap: "0.75rem", marginBottom: "1rem" }}
@@ -271,11 +282,11 @@ function FilmlerTab() {
               <input
                 value={tmdbQuery}
                 onChange={(e) => setTmdbQuery(e.target.value)}
-                placeholder="Film adı ara..."
+                placeholder={t("admin.tmdb_placeholder")}
                 style={inputStyle}
               />
               <button type="submit" style={btnStyle}>
-                Ara
+                {t("admin.search_btn")}
               </button>
             </form>
             {tmdbResults.length > 0 && (
@@ -347,7 +358,7 @@ function FilmlerTab() {
           </div>
 
           <div style={cardStyle}>
-            <h2 style={sectionTitle}>Mevcut Filmleri Ara & Düzenle</h2>
+            <h2 style={sectionTitle}>{t("admin.existing_movies")}</h2>
             <form
               onSubmit={handleMovieSearch}
               style={{ display: "flex", gap: "0.75rem", marginBottom: "1rem" }}
@@ -355,11 +366,11 @@ function FilmlerTab() {
               <input
                 value={movieQuery}
                 onChange={(e) => setMovieQuery(e.target.value)}
-                placeholder="Film adı ara..."
+                placeholder={t("admin.movie_placeholder")}
                 style={inputStyle}
               />
               <button type="submit" style={btnStyle}>
-                Ara
+                {t("admin.search_btn")}
               </button>
             </form>
             {movieResults.length > 0 ? (
@@ -443,7 +454,7 @@ function FilmlerTab() {
                           color: "#E8C547",
                         }}
                       >
-                        Düzenle
+                        {t("admin.edit_btn")}
                       </button>
                       <button
                         onClick={() => handleDelete(movie.id)}
@@ -453,7 +464,7 @@ function FilmlerTab() {
                           color: "#C62A2A",
                         }}
                       >
-                        Sil
+                        {t("admin.delete_btn")}
                       </button>
                     </div>
                   </div>
@@ -461,7 +472,7 @@ function FilmlerTab() {
               </div>
             ) : (
               <p style={{ color: "#666" }}>
-                {movieSearched ? "Film bulunamadı." : "Henüz arama yapılmadı."}
+                {movieSearched ? t("admin.not_found") : t("admin.not_searched")}
               </p>
             )}
           </div>
@@ -480,8 +491,8 @@ function FilmlerTab() {
           >
             <h2 style={sectionTitle}>
               {mode === "add"
-                ? `Film Ekle — ${selectedMovie?.title}`
-                : `Film Düzenle — ${editingMovie?.title}`}
+                ? `${t("admin.add_movie_title")} ${selectedMovie?.title}`
+                : `${t("admin.edit_movie_title")} ${editingMovie?.title}`}
             </h2>
             <button
               onClick={() => setMode("list")}
@@ -493,7 +504,7 @@ function FilmlerTab() {
                 fontSize: "0.9rem",
               }}
             >
-              ← Geri
+              {t("admin.back_btn")}
             </button>
           </div>
           <form
@@ -501,7 +512,7 @@ function FilmlerTab() {
             style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
           >
             <div>
-              <label style={labelStyle}>Poster</label>
+              <label style={labelStyle}>{t("admin.poster")}</label>
               <div
                 style={{ display: "flex", alignItems: "center", gap: "1rem" }}
               >
@@ -526,7 +537,7 @@ function FilmlerTab() {
                     padding: "0.4rem 0.8rem",
                   }}
                 >
-                  Poster Yükle
+                  {t("admin.upload_poster")}
                   <input
                     type="file"
                     accept="image/*"
@@ -539,7 +550,7 @@ function FilmlerTab() {
 
             <div style={{ display: "flex", gap: "1rem" }}>
               <div style={{ flex: 1 }}>
-                <label style={labelStyle}>İngilizce İsim *</label>
+                <label style={labelStyle}>{t("admin.english_name")}</label>
                 <input
                   value={mode === "add" ? selectedMovie?.title || "" : title}
                   onChange={
@@ -555,40 +566,40 @@ function FilmlerTab() {
                 />
               </div>
               <div style={{ flex: 1 }}>
-                <label style={labelStyle}>Orijinal İsim</label>
+                <label style={labelStyle}>{t("admin.original_name")}</label>
                 <input
                   value={originalTitle}
                   onChange={(e) => setOriginalTitle(e.target.value)}
-                  placeholder="Orijinal dildeki isim..."
+                  placeholder={t("admin.original_placeholder")}
                   style={inputStyle}
                 />
               </div>
             </div>
 
             <div>
-              <label style={labelStyle}>İnceleme *</label>
+              <label style={labelStyle}>{t("admin.review")}</label>
               <textarea
                 value={review}
                 onChange={(e) => setReview(e.target.value)}
                 required
                 rows={6}
-                placeholder="Film incelemesi..."
+                placeholder={t("admin.review_placeholder")}
                 style={{ ...inputStyle, resize: "vertical" }}
               />
             </div>
 
             <div style={{ display: "flex", gap: "1rem" }}>
               <div style={{ flex: 1 }}>
-                <label style={labelStyle}>Tür</label>
+                <label style={labelStyle}>{t("admin.genre")}</label>
                 <input
                   value={genre}
                   onChange={(e) => setGenre(e.target.value)}
-                  placeholder="Drama, Thriller..."
+                  placeholder={t("admin.genre_placeholder")}
                   style={inputStyle}
                 />
               </div>
               <div style={{ flex: 1 }}>
-                <label style={labelStyle}>Yıl</label>
+                <label style={labelStyle}>{t("admin.year")}</label>
                 <input
                   value={releaseYear}
                   onChange={(e) => setReleaseYear(e.target.value)}
@@ -599,7 +610,7 @@ function FilmlerTab() {
             </div>
 
             <div>
-              <label style={labelStyle}>Kısa Video</label>
+              <label style={labelStyle}>{t("admin.short_video")}</label>
               <div
                 style={{
                   display: "flex",
@@ -610,7 +621,7 @@ function FilmlerTab() {
                 <input
                   value={shortVideoUrl}
                   readOnly
-                  placeholder="Video yüklenince URL otomatik gelecek..."
+                  placeholder={t("admin.video_placeholder")}
                   style={{ ...inputStyle, flex: 1, color: "#666" }}
                 />
                 <label
@@ -623,7 +634,7 @@ function FilmlerTab() {
                     whiteSpace: "nowrap",
                   }}
                 >
-                  Video Yükle
+                  {t("admin.upload_video")}
                   <input
                     type="file"
                     accept="video/*"
@@ -635,7 +646,7 @@ function FilmlerTab() {
             </div>
 
             <div>
-              <label style={labelStyle}>Uzun Video</label>
+              <label style={labelStyle}>{t("admin.long_video")}</label>
               <div
                 style={{
                   display: "flex",
@@ -646,7 +657,7 @@ function FilmlerTab() {
                 <input
                   value={videoUrl}
                   readOnly
-                  placeholder="Video yüklenince URL otomatik gelecek..."
+                  placeholder={t("admin.video_placeholder")}
                   style={{ ...inputStyle, flex: 1, color: "#666" }}
                 />
                 <label
@@ -659,7 +670,7 @@ function FilmlerTab() {
                     whiteSpace: "nowrap",
                   }}
                 >
-                  Video Yükle
+                  {t("admin.upload_video")}
                   <input
                     type="file"
                     accept="video/*"
@@ -672,7 +683,7 @@ function FilmlerTab() {
 
             <div style={{ display: "flex", gap: "1rem" }}>
               <button type="submit" disabled={loading} style={btnStyle}>
-                {loading ? "Kaydediliyor..." : "Kaydet"}
+                {loading ? t("admin.saving") : t("admin.save")}
               </button>
               <button
                 type="button"
@@ -684,7 +695,7 @@ function FilmlerTab() {
                   color: "#666",
                 }}
               >
-                İptal
+                {t("admin.cancel")}
               </button>
             </div>
           </form>
@@ -695,6 +706,7 @@ function FilmlerTab() {
 }
 
 function KullanicilarTab() {
+  const { t } = useTranslation();
   const [query, setQuery] = useState("");
   const [users, setUsers] = useState([]);
   const [userSearched, setUserSearched] = useState(false);
@@ -713,7 +725,7 @@ function KullanicilarTab() {
       setUsers(res.data);
       setUserSearched(true);
     } catch (err) {
-      showToast("Arama başarısız.", "error");
+      showToast(t("admin.search_failed"), "error");
     }
   };
 
@@ -721,9 +733,9 @@ function KullanicilarTab() {
     try {
       const { freezeAccount } = await import("../api/users");
       await freezeAccount(userId);
-      showToast("Hesap durumu değiştirildi.");
+      showToast(t("admin.status_changed"));
     } catch (err) {
-      showToast("İşlem başarısız.", "error");
+      showToast(t("common.error"), "error");
     }
   };
 
@@ -732,24 +744,24 @@ function KullanicilarTab() {
     try {
       const { changeRole } = await import("../api/users");
       await changeRole(userId, newRole);
-      showToast("Rol güncellendi.");
+      showToast(t("admin.role_updated"));
       setUsers(
         users.map((u) => (u.id === userId ? { ...u, role: newRole } : u)),
       );
     } catch (err) {
-      showToast("Rol değiştirilemedi.", "error");
+      showToast(t("admin.role_failed"), "error");
     }
   };
 
   const handleDelete = async (userId) => {
-    if (!window.confirm("Bu hesabı silmek istediğine emin misin?")) return;
+    if (!window.confirm(t("admin.confirm_delete_user"))) return;
     try {
       const { deleteUserByAdmin } = await import("../api/users");
       await deleteUserByAdmin(userId);
-      showToast("Hesap silindi.");
+      showToast(t("admin.account_deleted"));
       setUsers(users.filter((u) => u.id !== userId));
     } catch (err) {
-      showToast("Hesap silinemedi.", "error");
+      showToast(t("admin.account_delete_failed"), "error");
     }
   };
 
@@ -757,7 +769,7 @@ function KullanicilarTab() {
     <div>
       <Toast message={toast.message} type={toast.type} />
       <div style={cardStyle}>
-        <h2 style={sectionTitle}>Kullanıcı Ara</h2>
+        <h2 style={sectionTitle}>{t("admin.user_search_title")}</h2>
         <form
           onSubmit={handleSearch}
           style={{ display: "flex", gap: "0.75rem", marginBottom: "1.5rem" }}
@@ -765,11 +777,11 @@ function KullanicilarTab() {
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Kullanıcı adı ara..."
+            placeholder={t("admin.user_placeholder")}
             style={inputStyle}
           />
           <button type="submit" style={btnStyle}>
-            Ara
+            {t("admin.search_btn")}
           </button>
         </form>
         {users.length > 0 ? (
@@ -848,7 +860,7 @@ function KullanicilarTab() {
                       color: "#E8C547",
                     }}
                   >
-                    Ban/Unban
+                    {t("admin.ban_unban")}
                   </button>
                   <button
                     onClick={() => handleRoleChange(user.id, user.role)}
@@ -858,7 +870,9 @@ function KullanicilarTab() {
                       color: "#666",
                     }}
                   >
-                    {user.role === "ADMIN" ? "USER yap" : "ADMIN yap"}
+                    {user.role === "ADMIN"
+                      ? t("admin.make_user")
+                      : t("admin.make_admin")}
                   </button>
                   <button
                     onClick={() => handleDelete(user.id)}
@@ -868,7 +882,7 @@ function KullanicilarTab() {
                       color: "#C62A2A",
                     }}
                   >
-                    Sil
+                    {t("admin.delete_btn")}
                   </button>
                 </div>
               </div>
@@ -876,7 +890,9 @@ function KullanicilarTab() {
           </div>
         ) : (
           <p style={{ color: "#666" }}>
-            {userSearched ? "Kullanıcı bulunamadı." : "Henüz arama yapılmadı."}
+            {userSearched
+              ? t("admin.user_not_found")
+              : t("admin.user_not_searched")}
           </p>
         )}
       </div>
