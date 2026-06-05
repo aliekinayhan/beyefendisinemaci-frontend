@@ -15,6 +15,10 @@ const resources = {
         admin: "Admin Panel",
         settings: "Settings",
       },
+      movie: {
+        in_list: "✓ Listed",
+        add_list: "+ List",
+      },
       common: {
         loading: "Loading...",
         error: "Something went wrong.",
@@ -38,6 +42,10 @@ const resources = {
         profile: "Profil",
         admin: "Admin Paneli",
         settings: "Ayarlar",
+      },
+      movie: {
+        in_list: "✓ Listede",
+        add_list: "+ Liste",
       },
       common: {
         loading: "Yükleniyor...",

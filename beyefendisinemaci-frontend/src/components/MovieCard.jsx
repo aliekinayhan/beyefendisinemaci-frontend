@@ -2,10 +2,12 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { addToWatchlist, removeFromWatchlist } from "../api/watchlist";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export default function MovieCard({ movie }) {
   const { token } = useAuth();
   const [added, setAdded] = useState(false);
+  const { t } = useTranslation();
 
   const handleWatchlist = async (e) => {
     e.preventDefault();
@@ -70,7 +72,7 @@ export default function MovieCard({ movie }) {
                 fontWeight: 600,
               }}
             >
-              {added ? "✓ Listede" : "+ Liste"}
+              {added ? t("movie.in_list") : t("movie.add_list")}
             </button>
           )}
         </div>
