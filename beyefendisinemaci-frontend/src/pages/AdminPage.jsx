@@ -31,42 +31,22 @@ export default function AdminPage() {
   }
 
   return (
-    <div style={{ background: "#0D0D0F", minHeight: "100vh", padding: "2rem" }}>
-      <div style={{ maxWidth: "1100px", margin: "0 auto" }}>
-        <h1
-          style={{
-            color: "#E8C547",
-            fontFamily: "'Playfair Display', serif",
-            fontSize: "1.8rem",
-            margin: "0 0 2rem",
-          }}
-        >
+    <div className="bg-[#0D0D0F] min-h-screen p-8">
+      <div className="max-w-5xl mx-auto">
+        <h1 className="text-[#E8C547] font-serif text-3xl mb-8">
           {t("admin.title")}
         </h1>
-        <div
-          style={{
-            display: "flex",
-            borderBottom: "1px solid #1a1a2e",
-            marginBottom: "2rem",
-          }}
-        >
+        <div className="flex border-b border-[#1a1a2e] mb-8">
           {TABS.map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              style={{
-                background: "transparent",
-                border: "none",
-                borderBottom:
+              className={`bg-transparent border-none px-6 py-3 cursor-pointer text-sm transition-colors
+                ${
                   activeTab === tab
-                    ? "2px solid #E8C547"
-                    : "2px solid transparent",
-                color: activeTab === tab ? "#E8C547" : "#666",
-                padding: "0.75rem 1.5rem",
-                cursor: "pointer",
-                fontSize: "0.95rem",
-                fontWeight: activeTab === tab ? 600 : 400,
-              }}
+                    ? "text-[#E8C547] border-b-2 border-[#E8C547] font-semibold"
+                    : "text-[#666] border-b-2 border-transparent hover:text-[#999]"
+                }`}
             >
               {tab === "movies"
                 ? t("admin.tabs_movies")
@@ -241,7 +221,7 @@ function FilmlerTab() {
     setLoading(true);
     try {
       await updateMovie(editingMovie.id, {
-        title: title,
+        title,
         tmdbId: editingMovie.tmdbId,
         releaseYear: releaseYear ? parseInt(releaseYear) : null,
         genre: genre || null,
@@ -267,54 +247,44 @@ function FilmlerTab() {
     }
   };
 
+  const inputCls =
+    "w-full bg-[#0D0D0F] border border-[#2a2a3e] rounded px-3 py-2.5 text-[#e0e0e0] text-sm outline-none focus:border-[#E8C547] transition-colors box-border";
+  const labelCls = "block text-[#aaa] text-sm mb-1";
+  const cardCls = "bg-[#111118] border border-[#1a1a2e] rounded-lg p-6 mb-6";
+  const btnCls =
+    "bg-[#E8C547] text-[#0D0D0F] border-none rounded px-6 py-2.5 font-bold cursor-pointer hover:opacity-90 transition-opacity text-sm";
+  const smallBtnCls =
+    "bg-transparent border rounded px-3 py-1 text-xs cursor-pointer transition-colors";
+
   return (
     <div>
       <Toast message={toast.message} type={toast.type} />
 
       {mode === "list" && (
         <>
-          <div style={cardStyle}>
-            <h2 style={sectionTitle}>{t("admin.tmdb_title")}</h2>
-            <form
-              onSubmit={handleTmdbSearch}
-              style={{ display: "flex", gap: "0.75rem", marginBottom: "1rem" }}
-            >
+          {/* TMDB Arama */}
+          <div className={cardCls}>
+            <h2 className="text-[#e0e0e0] text-base font-semibold mb-5">
+              {t("admin.tmdb_title")}
+            </h2>
+            <form onSubmit={handleTmdbSearch} className="flex gap-3 mb-4">
               <input
                 value={tmdbQuery}
                 onChange={(e) => setTmdbQuery(e.target.value)}
                 placeholder={t("admin.tmdb_placeholder")}
-                style={inputStyle}
+                className={inputCls}
               />
-              <button type="submit" style={btnStyle}>
+              <button type="submit" className={btnCls}>
                 {t("admin.search_btn")}
               </button>
             </form>
             {tmdbResults.length > 0 && (
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(130px, 1fr))",
-                  gap: "1rem",
-                  marginTop: "1rem",
-                }}
-              >
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mt-4">
                 {tmdbResults.map((movie) => (
                   <div
                     key={movie.tmdbId}
                     onClick={() => handleSelect(movie)}
-                    style={{
-                      background: "#0D0D0F",
-                      border: "1px solid #2a2a3e",
-                      borderRadius: "8px",
-                      overflow: "hidden",
-                      cursor: "pointer",
-                    }}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.borderColor = "#E8C547")
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.borderColor = "#2a2a3e")
-                    }
+                    className="bg-[#0D0D0F] border border-[#2a2a3e] rounded-lg overflow-hidden cursor-pointer hover:border-[#E8C547] transition-colors"
                   >
                     <img
                       src={
@@ -322,32 +292,13 @@ function FilmlerTab() {
                         "https://via.placeholder.com/130x195?text=?"
                       }
                       alt={movie.title}
-                      style={{
-                        width: "100%",
-                        height: "195px",
-                        objectFit: "cover",
-                      }}
+                      className="w-full h-48 object-cover"
                     />
-                    <div style={{ padding: "0.5rem" }}>
-                      <p
-                        style={{
-                          color: "#e0e0e0",
-                          fontSize: "0.8rem",
-                          margin: 0,
-                          whiteSpace: "nowrap",
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                        }}
-                      >
+                    <div className="p-2">
+                      <p className="text-[#e0e0e0] text-xs m-0 truncate">
                         {movie.title}
                       </p>
-                      <p
-                        style={{
-                          color: "#666",
-                          fontSize: "0.75rem",
-                          margin: "0.2rem 0 0",
-                        }}
-                      >
+                      <p className="text-[#666] text-xs mt-0.5 m-0">
                         {movie.releaseYear}
                       </p>
                     </div>
@@ -357,54 +308,32 @@ function FilmlerTab() {
             )}
           </div>
 
-          <div style={cardStyle}>
-            <h2 style={sectionTitle}>{t("admin.existing_movies")}</h2>
-            <form
-              onSubmit={handleMovieSearch}
-              style={{ display: "flex", gap: "0.75rem", marginBottom: "1rem" }}
-            >
+          {/* Mevcut Filmler */}
+          <div className={cardCls}>
+            <h2 className="text-[#e0e0e0] text-base font-semibold mb-5">
+              {t("admin.existing_movies")}
+            </h2>
+            <form onSubmit={handleMovieSearch} className="flex gap-3 mb-4">
               <input
                 value={movieQuery}
                 onChange={(e) => setMovieQuery(e.target.value)}
                 placeholder={t("admin.movie_placeholder")}
-                style={inputStyle}
+                className={inputCls}
               />
-              <button type="submit" style={btnStyle}>
+              <button type="submit" className={btnCls}>
                 {t("admin.search_btn")}
               </button>
             </form>
             {movieResults.length > 0 ? (
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "0.75rem",
-                }}
-              >
+              <div className="flex flex-col gap-3">
                 {movieResults.map((movie) => (
                   <div
                     key={movie.id}
-                    style={{
-                      background: "#0D0D0F",
-                      border: "1px solid #2a2a3e",
-                      borderRadius: "8px",
-                      padding: "0.75rem 1rem",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      gap: "1rem",
-                    }}
+                    className="bg-[#0D0D0F] border border-[#2a2a3e] rounded-lg px-4 py-3 flex items-center justify-between gap-4"
                   >
                     <Link
                       to={`/movies/${movie.id}`}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "0.75rem",
-                        textDecoration: "none",
-                        flex: 1,
-                        minWidth: 0,
-                      }}
+                      className="flex items-center gap-3 no-underline flex-1 min-w-0"
                     >
                       <img
                         src={
@@ -412,57 +341,28 @@ function FilmlerTab() {
                           "https://via.placeholder.com/40x60?text=?"
                         }
                         alt={movie.title}
-                        style={{
-                          width: "40px",
-                          height: "60px",
-                          objectFit: "cover",
-                          borderRadius: "4px",
-                          flexShrink: 0,
-                        }}
+                        className="w-10 h-[60px] object-cover rounded flex-shrink-0"
                       />
                       <div>
-                        <p
-                          style={{
-                            color: "#e0e0e0",
-                            margin: 0,
-                            fontSize: "0.9rem",
-                            fontWeight: 600,
-                          }}
-                        >
+                        <p className="text-[#e0e0e0] m-0 text-sm font-semibold">
                           {movie.title}
                         </p>
-                        <p
-                          style={{
-                            color: "#666",
-                            margin: 0,
-                            fontSize: "0.8rem",
-                          }}
-                        >
+                        <p className="text-[#666] m-0 text-xs">
                           {movie.genre}{" "}
                           {movie.releaseYear && `· ${movie.releaseYear}`}
                         </p>
                       </div>
                     </Link>
-                    <div
-                      style={{ display: "flex", gap: "0.5rem", flexShrink: 0 }}
-                    >
+                    <div className="flex gap-2 flex-shrink-0">
                       <button
                         onClick={() => handleEdit(movie)}
-                        style={{
-                          ...smallBtnStyle,
-                          borderColor: "#E8C547",
-                          color: "#E8C547",
-                        }}
+                        className={`${smallBtnCls} border-[#E8C547] text-[#E8C547] hover:bg-[#E8C547]/10`}
                       >
                         {t("admin.edit_btn")}
                       </button>
                       <button
                         onClick={() => handleDelete(movie.id)}
-                        style={{
-                          ...smallBtnStyle,
-                          borderColor: "#C62A2A",
-                          color: "#C62A2A",
-                        }}
+                        className={`${smallBtnCls} border-[#C62A2A] text-[#C62A2A] hover:bg-[#C62A2A]/10`}
                       >
                         {t("admin.delete_btn")}
                       </button>
@@ -471,7 +371,7 @@ function FilmlerTab() {
                 ))}
               </div>
             ) : (
-              <p style={{ color: "#666" }}>
+              <p className="text-[#666]">
                 {movieSearched ? t("admin.not_found") : t("admin.not_searched")}
               </p>
             )}
@@ -480,77 +380,54 @@ function FilmlerTab() {
       )}
 
       {(mode === "add" || mode === "edit") && (
-        <div style={cardStyle}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "1.25rem",
-            }}
-          >
-            <h2 style={sectionTitle}>
+        <div className={cardCls}>
+          <div className="flex justify-between items-center mb-5">
+            <h2 className="text-[#e0e0e0] text-base font-semibold m-0">
               {mode === "add"
                 ? `${t("admin.add_movie_title")} ${selectedMovie?.title}`
                 : `${t("admin.edit_movie_title")} ${editingMovie?.title}`}
             </h2>
             <button
               onClick={() => setMode("list")}
-              style={{
-                background: "transparent",
-                border: "none",
-                color: "#666",
-                cursor: "pointer",
-                fontSize: "0.9rem",
-              }}
+              className="bg-transparent border-none text-[#666] cursor-pointer text-sm"
             >
               {t("admin.back_btn")}
             </button>
           </div>
+
           <form
             onSubmit={mode === "add" ? handleSubmitAdd : handleSubmitEdit}
-            style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+            className="flex flex-col gap-4"
           >
+            {/* Poster */}
             <div>
-              <label style={labelStyle}>{t("admin.poster")}</label>
-              <div
-                style={{ display: "flex", alignItems: "center", gap: "1rem" }}
-              >
+              <label className={labelCls}>{t("admin.poster")}</label>
+              <div className="flex items-center gap-4">
                 {posterUrl && (
                   <img
                     src={posterUrl}
                     alt="poster"
-                    style={{
-                      width: "60px",
-                      height: "90px",
-                      objectFit: "cover",
-                      borderRadius: "4px",
-                    }}
+                    className="w-16 h-24 object-cover rounded"
                   />
                 )}
                 <label
-                  style={{
-                    ...smallBtnStyle,
-                    borderColor: "#2a2a3e",
-                    color: "#e0e0e0",
-                    cursor: "pointer",
-                    padding: "0.4rem 0.8rem",
-                  }}
+                  className={`${smallBtnCls} border-[#2a2a3e] text-[#e0e0e0] hover:border-[#444] px-3 py-1.5`}
                 >
                   {t("admin.upload_poster")}
                   <input
                     type="file"
                     accept="image/*"
                     onChange={handlePosterUpload}
-                    style={{ display: "none" }}
+                    className="hidden"
                   />
                 </label>
               </div>
             </div>
 
-            <div style={{ display: "flex", gap: "1rem" }}>
-              <div style={{ flex: 1 }}>
-                <label style={labelStyle}>{t("admin.english_name")}</label>
+            {/* İsimler */}
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <label className={labelCls}>{t("admin.english_name")}</label>
                 <input
                   value={mode === "add" ? selectedMovie?.title || "" : title}
                   onChange={
@@ -559,141 +436,115 @@ function FilmlerTab() {
                       : undefined
                   }
                   readOnly={mode === "add"}
-                  style={{
-                    ...inputStyle,
-                    color: mode === "add" ? "#666" : "#e0e0e0",
-                  }}
+                  className={`${inputCls} ${mode === "add" ? "text-[#666]" : "text-[#e0e0e0]"}`}
                 />
               </div>
-              <div style={{ flex: 1 }}>
-                <label style={labelStyle}>{t("admin.original_name")}</label>
+              <div className="flex-1">
+                <label className={labelCls}>{t("admin.original_name")}</label>
                 <input
                   value={originalTitle}
                   onChange={(e) => setOriginalTitle(e.target.value)}
                   placeholder={t("admin.original_placeholder")}
-                  style={inputStyle}
+                  className={inputCls}
                 />
               </div>
             </div>
 
+            {/* İnceleme */}
             <div>
-              <label style={labelStyle}>{t("admin.review")}</label>
+              <label className={labelCls}>{t("admin.review")}</label>
               <textarea
                 value={review}
                 onChange={(e) => setReview(e.target.value)}
                 required
                 rows={6}
                 placeholder={t("admin.review_placeholder")}
-                style={{ ...inputStyle, resize: "vertical" }}
+                className={`${inputCls} resize-y`}
               />
             </div>
 
-            <div style={{ display: "flex", gap: "1rem" }}>
-              <div style={{ flex: 1 }}>
-                <label style={labelStyle}>{t("admin.genre")}</label>
+            {/* Tür ve Yıl */}
+            <div className="flex gap-4">
+              <div className="flex-1">
+                <label className={labelCls}>{t("admin.genre")}</label>
                 <input
                   value={genre}
                   onChange={(e) => setGenre(e.target.value)}
                   placeholder={t("admin.genre_placeholder")}
-                  style={inputStyle}
+                  className={inputCls}
                 />
               </div>
-              <div style={{ flex: 1 }}>
-                <label style={labelStyle}>{t("admin.year")}</label>
+              <div className="flex-1">
+                <label className={labelCls}>{t("admin.year")}</label>
                 <input
                   value={releaseYear}
                   onChange={(e) => setReleaseYear(e.target.value)}
                   placeholder="2024"
-                  style={inputStyle}
+                  className={inputCls}
                 />
               </div>
             </div>
 
+            {/* Kısa Video */}
             <div>
-              <label style={labelStyle}>{t("admin.short_video")}</label>
-              <div
-                style={{
-                  display: "flex",
-                  gap: "0.75rem",
-                  alignItems: "center",
-                }}
-              >
+              <label className={labelCls}>{t("admin.short_video")}</label>
+              <div className="flex gap-3 items-center">
                 <input
                   value={shortVideoUrl}
                   readOnly
                   placeholder={t("admin.video_placeholder")}
-                  style={{ ...inputStyle, flex: 1, color: "#666" }}
+                  className={`${inputCls} flex-1 text-[#666]`}
                 />
                 <label
-                  style={{
-                    ...smallBtnStyle,
-                    borderColor: "#2a2a3e",
-                    color: "#e0e0e0",
-                    cursor: "pointer",
-                    padding: "0.4rem 0.8rem",
-                    whiteSpace: "nowrap",
-                  }}
+                  className={`${smallBtnCls} border-[#2a2a3e] text-[#e0e0e0] hover:border-[#444] px-3 py-1.5 whitespace-nowrap`}
                 >
                   {t("admin.upload_video")}
                   <input
                     type="file"
                     accept="video/*"
                     onChange={handleShortVideoUpload}
-                    style={{ display: "none" }}
+                    className="hidden"
                   />
                 </label>
               </div>
             </div>
 
+            {/* Uzun Video */}
             <div>
-              <label style={labelStyle}>{t("admin.long_video")}</label>
-              <div
-                style={{
-                  display: "flex",
-                  gap: "0.75rem",
-                  alignItems: "center",
-                }}
-              >
+              <label className={labelCls}>{t("admin.long_video")}</label>
+              <div className="flex gap-3 items-center">
                 <input
                   value={videoUrl}
                   readOnly
                   placeholder={t("admin.video_placeholder")}
-                  style={{ ...inputStyle, flex: 1, color: "#666" }}
+                  className={`${inputCls} flex-1 text-[#666]`}
                 />
                 <label
-                  style={{
-                    ...smallBtnStyle,
-                    borderColor: "#2a2a3e",
-                    color: "#e0e0e0",
-                    cursor: "pointer",
-                    padding: "0.4rem 0.8rem",
-                    whiteSpace: "nowrap",
-                  }}
+                  className={`${smallBtnCls} border-[#2a2a3e] text-[#e0e0e0] hover:border-[#444] px-3 py-1.5 whitespace-nowrap`}
                 >
                   {t("admin.upload_video")}
                   <input
                     type="file"
                     accept="video/*"
                     onChange={handleLongVideoUpload}
-                    style={{ display: "none" }}
+                    className="hidden"
                   />
                 </label>
               </div>
             </div>
 
-            <div style={{ display: "flex", gap: "1rem" }}>
-              <button type="submit" disabled={loading} style={btnStyle}>
+            <div className="flex gap-4">
+              <button
+                type="submit"
+                disabled={loading}
+                className={`${btnCls} ${loading ? "opacity-70 cursor-not-allowed" : ""}`}
+              >
                 {loading ? t("admin.saving") : t("admin.save")}
               </button>
               <button
                 type="button"
                 onClick={() => setMode("list")}
-                style={{
-                  ...btnStyle,
-                  background: "transparent",
-                  border: "1px solid #333",
-                  color: "#666",
-                }}
+                className="bg-transparent border border-[#333] text-[#666] rounded px-6 py-2.5 cursor-pointer text-sm hover:border-[#555] transition-colors"
               >
                 {t("admin.cancel")}
               </button>
@@ -765,110 +616,69 @@ function KullanicilarTab() {
     }
   };
 
+  const inputCls =
+    "w-full bg-[#0D0D0F] border border-[#2a2a3e] rounded px-3 py-2.5 text-[#e0e0e0] text-sm outline-none focus:border-[#E8C547] transition-colors box-border";
+  const smallBtnCls =
+    "bg-transparent border rounded px-3 py-1 text-xs cursor-pointer transition-colors";
+
   return (
     <div>
       <Toast message={toast.message} type={toast.type} />
-      <div style={cardStyle}>
-        <h2 style={sectionTitle}>{t("admin.user_search_title")}</h2>
-        <form
-          onSubmit={handleSearch}
-          style={{ display: "flex", gap: "0.75rem", marginBottom: "1.5rem" }}
-        >
+      <div className="bg-[#111118] border border-[#1a1a2e] rounded-lg p-6 mb-6">
+        <h2 className="text-[#e0e0e0] text-base font-semibold mb-5">
+          {t("admin.user_search_title")}
+        </h2>
+        <form onSubmit={handleSearch} className="flex gap-3 mb-6">
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder={t("admin.user_placeholder")}
-            style={inputStyle}
+            className={inputCls}
           />
-          <button type="submit" style={btnStyle}>
+          <button
+            type="submit"
+            className="bg-[#E8C547] text-[#0D0D0F] border-none rounded px-6 py-2.5 font-bold cursor-pointer hover:opacity-90 transition-opacity text-sm"
+          >
             {t("admin.search_btn")}
           </button>
         </form>
         {users.length > 0 ? (
-          <div
-            style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
-          >
+          <div className="flex flex-col gap-4">
             {users.map((user) => (
               <div
                 key={user.id}
-                style={{
-                  background: "#0D0D0F",
-                  border: "1px solid #2a2a3e",
-                  borderRadius: "8px",
-                  padding: "1rem",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  gap: "1rem",
-                }}
+                className="bg-[#0D0D0F] border border-[#2a2a3e] rounded-lg p-4 flex items-center justify-between gap-4"
               >
                 <Link
                   to={`/profile/${user.id}`}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "1rem",
-                    textDecoration: "none",
-                    flex: 1,
-                    minWidth: 0,
-                  }}
+                  className="flex items-center gap-4 no-underline flex-1 min-w-0"
                 >
                   {user.profilePhoto ? (
                     <img
                       src={user.profilePhoto}
                       alt={user.username}
-                      style={{
-                        width: "40px",
-                        height: "40px",
-                        borderRadius: "50%",
-                        objectFit: "cover",
-                        flexShrink: 0,
-                      }}
+                      className="w-10 h-10 rounded-full object-cover flex-shrink-0"
                     />
                   ) : (
                     <DefaultAvatar size={40} />
                   )}
                   <div>
-                    <p
-                      style={{
-                        color: "#e0e0e0",
-                        margin: 0,
-                        fontSize: "0.9rem",
-                        fontWeight: 600,
-                      }}
-                    >
+                    <p className="text-[#e0e0e0] m-0 text-sm font-semibold">
                       {user.username}
                     </p>
-                    <p style={{ color: "#666", margin: 0, fontSize: "0.8rem" }}>
-                      {user.role}
-                    </p>
+                    <p className="text-[#666] m-0 text-xs">{user.role}</p>
                   </div>
                 </Link>
-                <div
-                  style={{
-                    display: "flex",
-                    gap: "0.5rem",
-                    flexWrap: "wrap",
-                    flexShrink: 0,
-                  }}
-                >
+                <div className="flex gap-2 flex-wrap flex-shrink-0">
                   <button
                     onClick={() => handleFreeze(user.id)}
-                    style={{
-                      ...smallBtnStyle,
-                      borderColor: "#E8C547",
-                      color: "#E8C547",
-                    }}
+                    className={`${smallBtnCls} border-[#E8C547] text-[#E8C547] hover:bg-[#E8C547]/10`}
                   >
                     {t("admin.ban_unban")}
                   </button>
                   <button
                     onClick={() => handleRoleChange(user.id, user.role)}
-                    style={{
-                      ...smallBtnStyle,
-                      borderColor: "#666",
-                      color: "#666",
-                    }}
+                    className={`${smallBtnCls} border-[#666] text-[#666] hover:bg-white/5`}
                   >
                     {user.role === "ADMIN"
                       ? t("admin.make_user")
@@ -876,11 +686,7 @@ function KullanicilarTab() {
                   </button>
                   <button
                     onClick={() => handleDelete(user.id)}
-                    style={{
-                      ...smallBtnStyle,
-                      borderColor: "#C62A2A",
-                      color: "#C62A2A",
-                    }}
+                    className={`${smallBtnCls} border-[#C62A2A] text-[#C62A2A] hover:bg-[#C62A2A]/10`}
                   >
                     {t("admin.delete_btn")}
                   </button>
@@ -889,7 +695,7 @@ function KullanicilarTab() {
             ))}
           </div>
         ) : (
-          <p style={{ color: "#666" }}>
+          <p className="text-[#666]">
             {userSearched
               ? t("admin.user_not_found")
               : t("admin.user_not_searched")}
@@ -899,52 +705,3 @@ function KullanicilarTab() {
     </div>
   );
 }
-
-const cardStyle = {
-  background: "#111118",
-  border: "1px solid #1a1a2e",
-  borderRadius: "8px",
-  padding: "1.5rem",
-  marginBottom: "1.5rem",
-};
-const sectionTitle = {
-  color: "#e0e0e0",
-  fontSize: "1rem",
-  fontWeight: 600,
-  margin: "0 0 1.25rem",
-};
-const labelStyle = {
-  display: "block",
-  color: "#aaa",
-  fontSize: "0.85rem",
-  marginBottom: "0.4rem",
-};
-const inputStyle = {
-  width: "100%",
-  background: "#0D0D0F",
-  border: "1px solid #2a2a3e",
-  borderRadius: "4px",
-  padding: "0.65rem 0.75rem",
-  color: "#e0e0e0",
-  fontSize: "0.95rem",
-  outline: "none",
-  boxSizing: "border-box",
-};
-const btnStyle = {
-  background: "#E8C547",
-  color: "#0D0D0F",
-  border: "none",
-  borderRadius: "4px",
-  padding: "0.65rem 1.5rem",
-  fontWeight: 700,
-  cursor: "pointer",
-  fontSize: "0.9rem",
-};
-const smallBtnStyle = {
-  background: "transparent",
-  border: "1px solid",
-  borderRadius: "4px",
-  padding: "0.3rem 0.7rem",
-  fontSize: "0.8rem",
-  cursor: "pointer",
-};
