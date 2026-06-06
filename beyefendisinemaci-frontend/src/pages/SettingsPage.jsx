@@ -30,6 +30,7 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState({ message: null, type: "success" });
+  const [previewPhoto, setPreviewPhoto] = useState(null);
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -169,6 +170,36 @@ export default function SettingsPage() {
   return (
     <div style={{ background: "#0D0D0F", minHeight: "100vh", padding: "2rem" }}>
       <Toast message={toast.message} type={toast.type} />
+
+      {/* Fotoğraf önizleme modal */}
+      {previewPhoto && (
+        <div
+          onClick={() => setPreviewPhoto(null)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.9)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 999,
+            cursor: "pointer",
+          }}
+        >
+          <img
+            src={previewPhoto}
+            alt="preview"
+            style={{
+              maxWidth: "90vw",
+              maxHeight: "90vh",
+              borderRadius: "8px",
+              objectFit: "contain",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
+
       <div style={{ maxWidth: "600px", margin: "0 auto" }}>
         <h1
           style={{
@@ -190,12 +221,17 @@ export default function SettingsPage() {
                 style={{ display: "flex", alignItems: "center", gap: "1rem" }}
               >
                 <div
+                  onClick={() =>
+                    profile?.profilePhoto &&
+                    setPreviewPhoto(profile.profilePhoto)
+                  }
                   style={{
                     width: "70px",
                     height: "70px",
                     borderRadius: "50%",
                     overflow: "hidden",
                     border: "2px solid #2a2a3e",
+                    cursor: profile?.profilePhoto ? "pointer" : "default",
                   }}
                 >
                   {profile?.profilePhoto ? (
@@ -229,12 +265,16 @@ export default function SettingsPage() {
                 style={{ display: "flex", alignItems: "center", gap: "1rem" }}
               >
                 <div
+                  onClick={() =>
+                    profile?.coverPhoto && setPreviewPhoto(profile.coverPhoto)
+                  }
                   style={{
                     width: "120px",
                     height: "40px",
                     borderRadius: "4px",
                     overflow: "hidden",
                     border: "2px solid #2a2a3e",
+                    cursor: profile?.coverPhoto ? "pointer" : "default",
                   }}
                 >
                   {profile?.coverPhoto ? (
