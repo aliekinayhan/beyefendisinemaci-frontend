@@ -43,174 +43,130 @@ export default function RegisterPage() {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "#0D0D0F",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "2rem",
-      }}
-    >
-      <div
-        style={{
-          background: "#111118",
-          border: "1px solid #1a1a2e",
-          borderRadius: "8px",
-          padding: "2.5rem",
-          width: "100%",
-          maxWidth: "400px",
-        }}
-      >
-        <h1
-          style={{
-            color: "#E8C547",
-            fontFamily: "'Playfair Display', serif",
-            fontSize: "1.8rem",
-            marginBottom: "0.5rem",
-            textAlign: "center",
-          }}
-        >
+    <div className="min-h-screen bg-[#0D0D0F] flex items-center justify-center p-8">
+      <div className="bg-[#111118] border border-[#1a1a2e] rounded-lg p-10 w-full max-w-md">
+        <h1 className="text-[#E8C547] font-serif text-3xl mb-2 text-center">
           {t("auth.register_title")}
         </h1>
-        <p
-          style={{
-            color: "#666",
-            textAlign: "center",
-            marginBottom: "2rem",
-            fontSize: "0.9rem",
-          }}
-        >
+        <p className="text-[#666] text-center mb-8 text-sm">
           {t("auth.have_account")}{" "}
           <Link
             to="/login"
-            style={{ color: "#E8C547", textDecoration: "none" }}
+            className="text-[#E8C547] no-underline hover:underline"
           >
             {t("auth.login_link")}
           </Link>
         </p>
 
         {error && (
-          <div
-            style={{
-              background: "#2a1010",
-              border: "1px solid #C62A2A",
-              borderRadius: "4px",
-              padding: "0.75rem 1rem",
-              color: "#ff6b6b",
-              marginBottom: "1.5rem",
-              fontSize: "0.9rem",
-            }}
-          >
+          <div className="bg-[#2a1010] border border-[#C62A2A] rounded p-3 text-[#ff6b6b] mb-6 text-sm">
             {error}
           </div>
         )}
 
-        <form
-          onSubmit={handleSubmit}
-          style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
-        >
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
-            <label style={labelStyle}>{t("auth.username")}</label>
+            <label className="block text-[#aaa] text-sm mb-1">
+              {t("auth.username")}
+            </label>
             <input
               name="username"
               value={form.username}
               onChange={handleChange}
               required
-              style={inputStyle}
               placeholder={t("auth.username_placeholder")}
+              className="w-full bg-[#0D0D0F] border border-[#2a2a3e] rounded px-3 py-2.5 text-[#e0e0e0] text-sm outline-none focus:border-[#E8C547] transition-colors"
             />
           </div>
-          <div style={{ display: "flex", gap: "1rem" }}>
-            <div style={{ flex: 1 }}>
-              <label style={labelStyle}>{t("auth.first_name")}</label>
+
+          <div className="flex gap-4">
+            <div className="flex-1">
+              <label className="block text-[#aaa] text-sm mb-1">
+                {t("auth.first_name")}
+              </label>
               <input
                 name="firstName"
                 value={form.firstName}
                 onChange={handleChange}
-                style={inputStyle}
                 placeholder={t("auth.first_name_placeholder")}
+                className="w-full bg-[#0D0D0F] border border-[#2a2a3e] rounded px-3 py-2.5 text-[#e0e0e0] text-sm outline-none focus:border-[#E8C547] transition-colors"
               />
             </div>
-            <div style={{ flex: 1 }}>
-              <label style={labelStyle}>{t("auth.last_name")}</label>
+            <div className="flex-1">
+              <label className="block text-[#aaa] text-sm mb-1">
+                {t("auth.last_name")}
+              </label>
               <input
                 name="lastName"
                 value={form.lastName}
                 onChange={handleChange}
-                style={inputStyle}
                 placeholder={t("auth.last_name_placeholder")}
+                className="w-full bg-[#0D0D0F] border border-[#2a2a3e] rounded px-3 py-2.5 text-[#e0e0e0] text-sm outline-none focus:border-[#E8C547] transition-colors"
               />
             </div>
           </div>
+
           <div>
-            <label style={labelStyle}>{t("auth.email")}</label>
+            <label className="block text-[#aaa] text-sm mb-1">
+              {t("auth.email")}
+            </label>
             <input
               name="email"
               type="email"
               value={form.email}
               onChange={handleChange}
               required
-              style={inputStyle}
               placeholder={t("auth.email_placeholder")}
+              className="w-full bg-[#0D0D0F] border border-[#2a2a3e] rounded px-3 py-2.5 text-[#e0e0e0] text-sm outline-none focus:border-[#E8C547] transition-colors"
             />
           </div>
+
           <div>
-            <label style={labelStyle}>{t("auth.password")}</label>
+            <label className="block text-[#aaa] text-sm mb-1">
+              {t("auth.password")}
+            </label>
             <input
               name="password"
               type="password"
               value={form.password}
               onChange={handleChange}
               required
-              style={inputStyle}
               placeholder="••••••••"
+              className="w-full bg-[#0D0D0F] border border-[#2a2a3e] rounded px-3 py-2.5 text-[#e0e0e0] text-sm outline-none focus:border-[#E8C547] transition-colors"
             />
           </div>
+
           <div>
-            <label style={labelStyle}>{t("auth.confirm_password")}</label>
+            <label className="block text-[#aaa] text-sm mb-1">
+              {t("auth.confirm_password")}
+            </label>
             <input
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              style={{
-                ...inputStyle,
-                borderColor:
-                  confirmPassword && form.password !== confirmPassword
-                    ? "#C62A2A"
-                    : "#2a2a3e",
-              }}
               placeholder="••••••••"
+              className={`w-full bg-[#0D0D0F] border rounded px-3 py-2.5 text-[#e0e0e0] text-sm outline-none transition-colors ${
+                confirmPassword && form.password !== confirmPassword
+                  ? "border-[#C62A2A]"
+                  : "border-[#2a2a3e] focus:border-[#E8C547]"
+              }`}
             />
             {confirmPassword && form.password !== confirmPassword && (
-              <p
-                style={{
-                  color: "#C62A2A",
-                  fontSize: "0.8rem",
-                  margin: "0.3rem 0 0",
-                }}
-              >
+              <p className="text-[#C62A2A] text-xs mt-1">
                 {t("auth.passwords_not_match")}
               </p>
             )}
           </div>
+
           <button
             type="submit"
             disabled={loading}
-            style={{
-              background: "#E8C547",
-              color: "#0D0D0F",
-              border: "none",
-              borderRadius: "4px",
-              padding: "0.75rem",
-              fontWeight: 700,
-              fontSize: "1rem",
-              cursor: loading ? "not-allowed" : "pointer",
-              marginTop: "0.5rem",
-              opacity: loading ? 0.7 : 1,
-            }}
+            className={`bg-[#E8C547] text-[#0D0D0F] border-none rounded py-3 font-bold text-base mt-2 transition-opacity ${
+              loading
+                ? "opacity-70 cursor-not-allowed"
+                : "cursor-pointer hover:opacity-90"
+            }`}
           >
             {loading ? t("auth.registering") : t("auth.register_btn")}
           </button>
@@ -219,22 +175,3 @@ export default function RegisterPage() {
     </div>
   );
 }
-
-const labelStyle = {
-  display: "block",
-  color: "#aaa",
-  fontSize: "0.85rem",
-  marginBottom: "0.4rem",
-};
-
-const inputStyle = {
-  width: "100%",
-  background: "#0D0D0F",
-  border: "1px solid #2a2a3e",
-  borderRadius: "4px",
-  padding: "0.65rem 0.75rem",
-  color: "#e0e0e0",
-  fontSize: "0.95rem",
-  outline: "none",
-  boxSizing: "border-box",
-};
