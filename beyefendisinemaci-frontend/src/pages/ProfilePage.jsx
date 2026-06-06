@@ -19,7 +19,8 @@ export default function ProfilePage() {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("watchlist");
-  const { t } = useTranslation();
+  const [previewPhoto, setPreviewPhoto] = useState(null);
+  const { t, i18n } = useTranslation();
 
   const isOwner = user?.id === id;
 
@@ -93,8 +94,40 @@ export default function ProfilePage() {
 
   return (
     <div style={{ background: "#0D0D0F", minHeight: "100vh" }}>
+      {/* Fotoğraf önizleme modal */}
+      {previewPhoto && (
+        <div
+          onClick={() => setPreviewPhoto(null)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.9)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 999,
+            cursor: "pointer",
+          }}
+        >
+          <img
+            src={previewPhoto}
+            alt="preview"
+            style={{
+              maxWidth: "90vw",
+              maxHeight: "90vh",
+              borderRadius: "8px",
+              objectFit: "contain",
+            }}
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
+
       <div style={{ background: "#0D0D0F", padding: "2rem 2rem 0" }}>
         <div
+          onClick={() =>
+            profile.coverPhoto && setPreviewPhoto(profile.coverPhoto)
+          }
           style={{
             maxWidth: "900px",
             margin: "0 auto",
@@ -102,6 +135,7 @@ export default function ProfilePage() {
             borderRadius: "12px",
             overflow: "hidden",
             background: "#1a1a2e",
+            cursor: profile.coverPhoto ? "pointer" : "default",
           }}
         >
           {profile.coverPhoto ? (
@@ -134,6 +168,9 @@ export default function ProfilePage() {
           }}
         >
           <div
+            onClick={() =>
+              profile.profilePhoto && setPreviewPhoto(profile.profilePhoto)
+            }
             style={{
               width: "120px",
               height: "120px",
@@ -141,6 +178,7 @@ export default function ProfilePage() {
               border: "4px solid #0D0D0F",
               overflow: "hidden",
               flexShrink: 0,
+              cursor: profile.profilePhoto ? "pointer" : "default",
             }}
           >
             {profile.profilePhoto ? (
@@ -383,7 +421,7 @@ export default function ProfilePage() {
                             }}
                           >
                             {new Date(comment.createdAt).toLocaleDateString(
-                              "tr-TR",
+                              i18n.language === "tr" ? "tr-TR" : "en-US",
                               {
                                 day: "numeric",
                                 month: "long",
