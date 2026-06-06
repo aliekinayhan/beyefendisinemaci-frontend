@@ -32,14 +32,17 @@ export default function MovieCard({ movie }) {
   return (
     <Link to={`/movies/${movie.id}`} className="no-underline">
       <div className="bg-[#111118] border border-[#1a1a2e] rounded-lg overflow-hidden cursor-pointer transition-colors hover:border-[#E8C547] relative">
-        <div className="relative aspect-[2/3] overflow-hidden">
+        <div
+          className="relative overflow-hidden"
+          style={{ paddingBottom: "150%" }}
+        >
           <img
             src={
               movie.posterUrl ||
               "https://via.placeholder.com/300x450?text=Poster+Yok"
             }
             alt={movie.title}
-            className="w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover"
           />
           {token && (
             <button
