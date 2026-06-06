@@ -12,6 +12,7 @@ export default function RegisterPage() {
     email: "",
     password: "",
   });
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const { loginUser } = useAuth();
@@ -24,6 +25,10 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (form.password !== confirmPassword) {
+      setError(t("auth.passwords_not_match"));
+      return;
+    }
     setLoading(true);
     setError(null);
     try {
@@ -162,6 +167,34 @@ export default function RegisterPage() {
               style={inputStyle}
               placeholder="••••••••"
             />
+          </div>
+          <div>
+            <label style={labelStyle}>{t("auth.confirm_password")}</label>
+            <input
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              style={{
+                ...inputStyle,
+                borderColor:
+                  confirmPassword && form.password !== confirmPassword
+                    ? "#C62A2A"
+                    : "#2a2a3e",
+              }}
+              placeholder="••••••••"
+            />
+            {confirmPassword && form.password !== confirmPassword && (
+              <p
+                style={{
+                  color: "#C62A2A",
+                  fontSize: "0.8rem",
+                  margin: "0.3rem 0 0",
+                }}
+              >
+                {t("auth.passwords_not_match")}
+              </p>
+            )}
           </div>
           <button
             type="submit"
