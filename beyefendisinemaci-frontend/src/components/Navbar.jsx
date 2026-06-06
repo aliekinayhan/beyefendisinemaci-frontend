@@ -56,37 +56,18 @@ export default function Navbar() {
   };
 
   return (
-    <nav
-      style={{
-        background: "#0D0D0F",
-        borderBottom: "1px solid #1a1a2e",
-        padding: "0 2rem",
-        height: "64px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        position: "sticky",
-        top: 0,
-        zIndex: 100,
-      }}
-    >
+    <nav className="bg-[#0D0D0F] border-b border-[#1a1a2e] px-8 h-16 flex items-center justify-between sticky top-0 z-[100]">
       <Link
         to="/"
-        style={{
-          color: "#E8C547",
-          fontFamily: "'Playfair Display', serif",
-          fontSize: "1.4rem",
-          fontWeight: 700,
-          textDecoration: "none",
-          letterSpacing: "0.05em",
-        }}
+        className="text-[#E8C547] font-serif text-xl font-bold no-underline tracking-wider flex-shrink-0"
       >
         Beyefendi Sinemacı
       </Link>
 
+      {/* Arama */}
       <form
         onSubmit={handleSearch}
-        style={{ position: "relative", flex: "0 1 320px" }}
+        className="relative flex-shrink-0 w-64 mx-4"
       >
         <input
           ref={inputRef}
@@ -98,58 +79,18 @@ export default function Navbar() {
           onFocus={handleFocus}
           onBlur={handleBlur}
           placeholder={t("movies.search_placeholder")}
-          style={{
-            width: "100%",
-            background: "#111118",
-            border: "1px solid #2a2a3e",
-            borderRadius: "4px",
-            padding: "0.4rem 1rem",
-            color: "#e0e0e0",
-            fontSize: "0.875rem",
-            outline: "none",
-            boxSizing: "border-box",
-          }}
+          className="w-full bg-[#111118] border border-[#2a2a3e] rounded px-4 py-1.5 text-[#e0e0e0] text-sm outline-none focus:border-[#E8C547] transition-colors box-border"
         />
         {showTrending && trending.length > 0 && (
-          <div
-            style={{
-              position: "absolute",
-              top: "100%",
-              left: 0,
-              right: 0,
-              background: "#111118",
-              border: "1px solid #2a2a3e",
-              borderRadius: "4px",
-              marginTop: "4px",
-              zIndex: 200,
-            }}
-          >
-            <p
-              style={{
-                color: "#666",
-                fontSize: "0.75rem",
-                padding: "0.5rem 1rem 0.25rem",
-                margin: 0,
-              }}
-            >
+          <div className="absolute top-full left-0 right-0 bg-[#111118] border border-[#2a2a3e] rounded mt-1 z-[200]">
+            <p className="text-[#666] text-xs px-4 pt-2 pb-1 m-0">
               En çok arananlar
             </p>
             {trending.map((term, i) => (
               <div
                 key={i}
                 onMouseDown={() => handleTrendingClick(term)}
-                style={{
-                  padding: "0.5rem 1rem",
-                  color: "#e0e0e0",
-                  fontSize: "0.875rem",
-                  cursor: "pointer",
-                }}
-                onMouseEnter={(e) =>
-                  (e.currentTarget.style.background = "#1a1a2e")
-                }
-                onMouseLeave={(e) =>
-                  (e.currentTarget.style.background = "transparent")
-                }
+                className="px-4 py-2 text-[#e0e0e0] text-sm cursor-pointer hover:bg-[#1a1a2e] transition-colors"
               >
                 🔥 {term}
               </div>
@@ -158,97 +99,63 @@ export default function Navbar() {
         )}
       </form>
 
-      <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
-        <Link to="/movies" style={linkStyle}>
+      {/* Sağ menü */}
+      <div className="flex items-center gap-6">
+        <Link
+          to="/movies"
+          className="text-[#e0e0e0] no-underline text-sm tracking-wide hover:text-white transition-colors"
+        >
           {t("nav.movies")}
         </Link>
 
         {token ? (
           <>
             {isAdmin && (
-              <Link to="/admin" style={{ ...linkStyle, color: "#C62A2A" }}>
+              <Link
+                to="/admin"
+                className="text-[#C62A2A] no-underline text-sm tracking-wide hover:opacity-80 transition-opacity"
+              >
                 {t("nav.admin")}
               </Link>
             )}
-            <div style={{ position: "relative" }}>
+            <div className="relative">
               {user?.profilePhoto ? (
                 <img
                   src={user.profilePhoto}
                   alt="profil"
                   onClick={() => setDropdownOpen(!dropdownOpen)}
-                  style={{
-                    width: "36px",
-                    height: "36px",
-                    borderRadius: "50%",
-                    objectFit: "cover",
-                    border: "2px solid #2a2a3e",
-                    cursor: "pointer",
-                  }}
+                  className="w-9 h-9 rounded-full object-cover border-2 border-[#2a2a3e] cursor-pointer hover:border-[#E8C547] transition-colors"
                 />
               ) : (
                 <div
                   onClick={() => setDropdownOpen(!dropdownOpen)}
-                  style={{ cursor: "pointer" }}
+                  className="cursor-pointer"
                 >
                   <DefaultAvatar size={36} />
                 </div>
               )}
               {dropdownOpen && (
                 <div
-                  style={{
-                    position: "absolute",
-                    top: "48px",
-                    right: 0,
-                    background: "#111118",
-                    border: "1px solid #1a1a2e",
-                    borderRadius: "8px",
-                    minWidth: "160px",
-                    overflow: "hidden",
-                    zIndex: 200,
-                  }}
+                  className="absolute top-12 right-0 bg-[#111118] border border-[#1a1a2e] rounded-lg min-w-[160px] overflow-hidden z-[200]"
                   onMouseLeave={() => setDropdownOpen(false)}
                 >
                   <Link
                     to={`/profile/${user?.id}`}
                     onClick={() => setDropdownOpen(false)}
-                    style={{
-                      display: "block",
-                      padding: "0.75rem 1rem",
-                      color: "#e0e0e0",
-                      textDecoration: "none",
-                      fontSize: "0.9rem",
-                      borderBottom: "1px solid #1a1a2e",
-                    }}
+                    className="block px-4 py-3 text-[#e0e0e0] no-underline text-sm border-b border-[#1a1a2e] hover:bg-[#1a1a2e] transition-colors"
                   >
                     {t("nav.profile")}
                   </Link>
                   <Link
                     to="/settings"
                     onClick={() => setDropdownOpen(false)}
-                    style={{
-                      display: "block",
-                      padding: "0.75rem 1rem",
-                      color: "#e0e0e0",
-                      textDecoration: "none",
-                      fontSize: "0.9rem",
-                      borderBottom: "1px solid #1a1a2e",
-                    }}
+                    className="block px-4 py-3 text-[#e0e0e0] no-underline text-sm border-b border-[#1a1a2e] hover:bg-[#1a1a2e] transition-colors"
                   >
                     {t("nav.settings")}
                   </Link>
                   <button
                     onClick={handleLogout}
-                    style={{
-                      display: "block",
-                      width: "100%",
-                      padding: "0.75rem 1rem",
-                      background: "transparent",
-                      border: "none",
-                      color: "#C62A2A",
-                      fontSize: "0.9rem",
-                      textAlign: "left",
-                      cursor: "pointer",
-                    }}
+                    className="block w-full px-4 py-3 bg-transparent border-none text-[#C62A2A] text-sm text-left cursor-pointer hover:bg-[#1a1a2e] transition-colors"
                   >
                     {t("nav.logout")}
                   </button>
@@ -258,19 +165,15 @@ export default function Navbar() {
           </>
         ) : (
           <>
-            <Link to="/login" style={linkStyle}>
+            <Link
+              to="/login"
+              className="text-[#e0e0e0] no-underline text-sm tracking-wide hover:text-white transition-colors"
+            >
               {t("nav.login")}
             </Link>
             <Link
               to="/register"
-              style={{
-                ...linkStyle,
-                background: "#E8C547",
-                color: "#0D0D0F",
-                padding: "0.4rem 1rem",
-                borderRadius: "4px",
-                fontWeight: 600,
-              }}
+              className="bg-[#E8C547] text-[#0D0D0F] no-underline text-sm px-4 py-1.5 rounded font-semibold hover:opacity-90 transition-opacity"
             >
               {t("nav.register")}
             </Link>
@@ -281,10 +184,3 @@ export default function Navbar() {
     </nav>
   );
 }
-
-const linkStyle = {
-  color: "#e0e0e0",
-  textDecoration: "none",
-  fontSize: "0.9rem",
-  letterSpacing: "0.03em",
-};

@@ -11,17 +11,7 @@ export default function LanguageSwitcher() {
   return (
     <button
       onClick={toggle}
-      style={{
-        background: "transparent",
-        border: "1px solid #444",
-        borderRadius: "4px",
-        padding: "4px 10px",
-        cursor: "pointer",
-        color: "#e0e0e0",
-        fontSize: "0.85rem",
-        fontWeight: 600,
-        letterSpacing: "0.05em",
-      }}
+      className="bg-transparent border border-[#444] rounded px-2.5 py-1 cursor-pointer text-[#e0e0e0] text-sm font-semibold tracking-wider hover:border-[#666] transition-colors"
     >
       {isEN ? "TR" : "EN"}
     </button>

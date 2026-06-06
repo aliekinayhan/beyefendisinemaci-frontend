@@ -26,80 +26,36 @@ export default function MovieCard({ movie }) {
   };
 
   return (
-    <Link to={`/movies/${movie.id}`} style={{ textDecoration: "none" }}>
-      <div
-        style={{
-          background: "#111118",
-          border: "1px solid #1a1a2e",
-          borderRadius: "8px",
-          overflow: "hidden",
-          cursor: "pointer",
-          transition: "transform 0.2s, border-color 0.2s",
-          position: "relative",
-        }}
-        onMouseEnter={(e) => (e.currentTarget.style.borderColor = "#E8C547")}
-        onMouseLeave={(e) => (e.currentTarget.style.borderColor = "#1a1a2e")}
-      >
-        <div
-          style={{
-            position: "relative",
-            aspectRatio: "2/3",
-            overflow: "hidden",
-          }}
-        >
+    <Link to={`/movies/${movie.id}`} className="no-underline">
+      <div className="bg-[#111118] border border-[#1a1a2e] rounded-lg overflow-hidden cursor-pointer transition-colors hover:border-[#E8C547] relative">
+        <div className="relative aspect-[2/3] overflow-hidden">
           <img
             src={
               movie.posterUrl ||
               "https://via.placeholder.com/300x450?text=Poster+Yok"
             }
             alt={movie.title}
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            className="w-full h-full object-cover"
           />
           {token && (
             <button
               onClick={handleWatchlist}
-              style={{
-                position: "absolute",
-                top: "8px",
-                right: "8px",
-                background: added ? "#E8C547" : "rgba(0,0,0,0.7)",
-                border: "1px solid #E8C547",
-                borderRadius: "4px",
-                color: added ? "#0D0D0F" : "#E8C547",
-                padding: "0.3rem 0.6rem",
-                fontSize: "0.75rem",
-                cursor: "pointer",
-                fontWeight: 600,
-              }}
+              className={`absolute top-2 right-2 border border-[#E8C547] rounded px-2 py-1 text-xs font-semibold cursor-pointer transition-colors ${
+                added
+                  ? "bg-[#E8C547] text-[#0D0D0F]"
+                  : "bg-black/70 text-[#E8C547] hover:bg-[#E8C547] hover:text-[#0D0D0F]"
+              }`}
             >
               {added ? t("movie.in_list") : t("movie.add_list")}
             </button>
           )}
         </div>
-        <div style={{ padding: "0.75rem" }}>
-          <h3
-            style={{
-              color: "#e0e0e0",
-              fontSize: "0.95rem",
-              fontWeight: 600,
-              margin: 0,
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-            }}
-          >
+        <div className="p-3">
+          <h3 className="text-[#e0e0e0] text-sm font-semibold m-0 truncate">
             {movie.title}
           </h3>
           {movie.releaseYear && (
-            <p
-              style={{
-                color: "#666",
-                fontSize: "0.8rem",
-                margin: "0.3rem 0 0",
-              }}
-            >
-              {movie.releaseYear}
-            </p>
+            <p className="text-[#666] text-xs mt-1 m-0">{movie.releaseYear}</p>
           )}
         </div>
       </div>
