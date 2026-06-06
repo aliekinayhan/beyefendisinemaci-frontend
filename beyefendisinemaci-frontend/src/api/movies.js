@@ -11,3 +11,6 @@ export const updateMovie = (id, data) => api.put(`/api/movies/${id}`, data);
 export const deleteMovie = (id) => api.delete(`/api/movies/${id}`);
 export const getTrendingSearches = () =>
   api.get("/api/movies/trending-searches");
+
+export const searchMovies2 = (q) =>
+  api.get("/api/movies/searching", { params: { q } });
