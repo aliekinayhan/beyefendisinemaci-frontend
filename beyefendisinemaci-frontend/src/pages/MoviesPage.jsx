@@ -54,23 +54,13 @@ export default function MoviesPage() {
   };
 
   return (
-    <div style={{ background: "#0D0D0F", minHeight: "100vh", padding: "2rem" }}>
-      <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
-        <h1
-          style={{
-            color: "#E8C547",
-            fontFamily: "'Playfair Display', serif",
-            fontSize: "1.8rem",
-            margin: "0 0 2rem",
-          }}
-        >
+    <div className="bg-[#0D0D0F] min-h-screen p-8">
+      <div className="max-w-6xl mx-auto">
+        <h1 className="text-[#E8C547] font-serif text-3xl mb-8">
           {t("movies.title")}
         </h1>
 
-        <form
-          onSubmit={handleSearch}
-          style={{ display: "flex", gap: "0.75rem", marginBottom: "2rem" }}
-        >
+        <form onSubmit={handleSearch} className="flex gap-3 mb-8">
           <input
             value={query}
             onChange={(e) => {
@@ -81,49 +71,26 @@ export default function MoviesPage() {
               }
             }}
             placeholder={t("movies.search_placeholder")}
-            style={{
-              flex: 1,
-              background: "#111118",
-              border: "1px solid #2a2a3e",
-              borderRadius: "4px",
-              padding: "0.65rem 1rem",
-              color: "#e0e0e0",
-              fontSize: "0.95rem",
-              outline: "none",
-            }}
+            className="flex-1 bg-[#111118] border border-[#2a2a3e] rounded px-4 py-2.5 text-[#e0e0e0] text-sm outline-none focus:border-[#E8C547] transition-colors"
           />
           <button
             type="submit"
-            style={{
-              background: "#E8C547",
-              color: "#0D0D0F",
-              border: "none",
-              borderRadius: "4px",
-              padding: "0.65rem 1.5rem",
-              fontWeight: 700,
-              cursor: "pointer",
-            }}
+            className="bg-[#E8C547] text-[#0D0D0F] border-none rounded px-6 py-2.5 font-bold cursor-pointer hover:opacity-90 transition-opacity"
           >
             {t("movies.search_btn")}
           </button>
         </form>
 
         {loading ? (
-          <div style={{ color: "#666", textAlign: "center", padding: "4rem" }}>
+          <div className="text-[#666] text-center py-16">
             {t("movies.loading")}
           </div>
         ) : movies.length === 0 ? (
-          <div style={{ color: "#666", textAlign: "center", padding: "4rem" }}>
+          <div className="text-[#666] text-center py-16">
             {t("movies.not_found")}
           </div>
         ) : (
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))",
-              gap: "1.5rem",
-            }}
-          >
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
             {movies.map((movie) => (
               <MovieCard key={movie.id} movie={movie} />
             ))}
@@ -131,34 +98,29 @@ export default function MoviesPage() {
         )}
 
         {!searching && totalPages > 1 && (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              gap: "0.5rem",
-              marginTop: "2.5rem",
-            }}
-          >
+          <div className="flex justify-center items-center gap-2 mt-10">
             <button
               onClick={() => setPage((p) => Math.max(0, p - 1))}
               disabled={page === 0}
-              style={pageButtonStyle(page === 0)}
+              className={`rounded px-4 py-2 font-semibold text-sm border-none transition-opacity ${
+                page === 0
+                  ? "bg-[#1a1a2e] text-[#444] cursor-not-allowed"
+                  : "bg-[#E8C547] text-[#0D0D0F] cursor-pointer hover:opacity-90"
+              }`}
             >
               {t("movies.prev")}
             </button>
-            <span
-              style={{
-                color: "#666",
-                padding: "0.5rem 1rem",
-                fontSize: "0.9rem",
-              }}
-            >
+            <span className="text-[#666] px-4 py-2 text-sm">
               {page + 1} / {totalPages}
             </span>
             <button
               onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
               disabled={page === totalPages - 1}
-              style={pageButtonStyle(page === totalPages - 1)}
+              className={`rounded px-4 py-2 font-semibold text-sm border-none transition-opacity ${
+                page === totalPages - 1
+                  ? "bg-[#1a1a2e] text-[#444] cursor-not-allowed"
+                  : "bg-[#E8C547] text-[#0D0D0F] cursor-pointer hover:opacity-90"
+              }`}
             >
               {t("movies.next")}
             </button>
@@ -168,14 +130,3 @@ export default function MoviesPage() {
     </div>
   );
 }
-
-const pageButtonStyle = (disabled) => ({
-  background: disabled ? "#1a1a2e" : "#E8C547",
-  color: disabled ? "#444" : "#0D0D0F",
-  border: "none",
-  borderRadius: "4px",
-  padding: "0.5rem 1rem",
-  cursor: disabled ? "not-allowed" : "pointer",
-  fontWeight: 600,
-  fontSize: "0.9rem",
-});
