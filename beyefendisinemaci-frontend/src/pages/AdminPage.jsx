@@ -2,7 +2,7 @@ import { useState } from "react";
 import { searchTmdb } from "../api/tmdb";
 import {
   createMovie,
-  searchMovies2,
+  searchMovies,
   deleteMovie,
   updateMovie,
 } from "../api/movies";
@@ -101,7 +101,7 @@ function FilmlerTab() {
   const handleMovieSearch = async (e) => {
     e.preventDefault();
     try {
-      const res = await searchMovies2(movieQuery);
+      const res = await searchMovies(movieQuery);
       setMovieResults(res.data);
       setMovieSearched(true);
     } catch (err) {
@@ -202,7 +202,7 @@ function FilmlerTab() {
       showToast(t("admin.movie_added"));
       setSelectedMovie(null);
       setMode("list");
-      const res = await searchMovies2("");
+      const res = await searchMovies("");
       setMovieResults(res.data);
       setMovieSearched(true);
     } catch (err) {
@@ -234,7 +234,7 @@ function FilmlerTab() {
       showToast(t("admin.movie_updated"));
       setEditingMovie(null);
       setMode("list");
-      const res = await searchMovies2(movieQuery);
+      const res = await searchMovies(movieQuery);
       setMovieResults(res.data);
       setMovieSearched(true);
     } catch (err) {
