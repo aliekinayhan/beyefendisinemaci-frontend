@@ -65,94 +65,38 @@ export default function MovieDetailPage() {
 
   if (loading)
     return (
-      <div
-        style={{
-          background: "#0D0D0F",
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <p style={{ color: "#666" }}>{t("movie.loading")}</p>
+      <div className="bg-[#0D0D0F] min-h-screen flex items-center justify-center">
+        <p className="text-[#666]">{t("movie.loading")}</p>
       </div>
     );
 
   if (!movie)
     return (
-      <div
-        style={{
-          background: "#0D0D0F",
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <p style={{ color: "#666" }}>{t("movie.not_found")}</p>
+      <div className="bg-[#0D0D0F] min-h-screen flex items-center justify-center">
+        <p className="text-[#666]">{t("movie.not_found")}</p>
       </div>
     );
 
   return (
-    <div style={{ background: "#0D0D0F", minHeight: "100vh", padding: "2rem" }}>
-      <div style={{ maxWidth: "1000px", margin: "0 auto" }}>
-        <div
-          style={{
-            display: "flex",
-            gap: "2rem",
-            marginBottom: "3rem",
-            flexWrap: "wrap",
-            alignItems: "flex-start",
-          }}
-        >
-          <div
-            style={{
-              position: "relative",
-              flexShrink: 0,
-              width: "240px",
-              height: "360px",
-            }}
-          >
+    <div className="bg-[#0D0D0F] min-h-screen p-8">
+      <div className="max-w-4xl mx-auto">
+        {/* Film bilgisi */}
+        <div className="flex gap-8 mb-12 flex-wrap items-start">
+          <div className="relative flex-shrink-0 w-48 sm:w-60 h-72 sm:h-[360px]">
             <img
               src={
                 movie.posterUrl ||
                 "https://via.placeholder.com/300x450?text=Poster+Yok"
               }
               alt={movie.title}
-              style={{
-                width: "240px",
-                height: "360px",
-                borderRadius: "8px",
-                display: "block",
-                objectFit: "cover",
-              }}
+              className="w-full h-full rounded-lg object-cover block"
             />
             {movie.shortVideoUrl && (
               <div
                 onClick={() => setShortVideoOpen(true)}
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  background: "rgba(0,0,0,0.35)",
-                  borderRadius: "8px",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  cursor: "pointer",
-                }}
+                className="absolute inset-0 bg-black/35 rounded-lg flex items-center justify-center cursor-pointer"
               >
-                <div
-                  style={{
-                    width: "52px",
-                    height: "52px",
-                    borderRadius: "50%",
-                    background: "rgba(232, 197, 71, 0.15)",
-                    border: "2px solid #E8C547",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
+                <div className="w-12 h-12 rounded-full bg-[#E8C547]/15 border-2 border-[#E8C547] flex items-center justify-center">
                   <svg
                     width="20"
                     height="20"
@@ -166,140 +110,72 @@ export default function MovieDetailPage() {
             )}
           </div>
 
-          <div style={{ flex: 1, minWidth: "200px" }}>
-            <h1
-              style={{
-                color: "#E8C547",
-                fontFamily: "'Playfair Display', serif",
-                fontSize: "2rem",
-                margin: "0 0 0.25rem",
-              }}
-            >
+          <div className="flex-1 min-w-[200px]">
+            <h1 className="text-[#E8C547] font-serif text-3xl sm:text-4xl mb-1">
               {movie.title}
             </h1>
             {movie.originalTitle && movie.originalTitle !== movie.title && (
-              <p
-                style={{
-                  color: "#888",
-                  fontSize: "0.9rem",
-                  fontStyle: "italic",
-                  margin: "0 0 0.5rem",
-                }}
-              >
+              <p className="text-[#888] text-sm italic mb-2">
                 {movie.originalTitle}
               </p>
             )}
-            <p
-              style={{
-                color: "#666",
-                fontSize: "0.9rem",
-                marginBottom: "1.5rem",
-              }}
-            >
+            <p className="text-[#666] text-sm mb-6">
               {movie.genre} {movie.releaseYear && `· ${movie.releaseYear}`}
             </p>
-            <p
-              style={{
-                color: "#ccc",
-                lineHeight: 1.7,
-                fontSize: "0.95rem",
-                whiteSpace: "pre-wrap",
-              }}
-            >
+            <p className="text-[#ccc] leading-7 text-sm whitespace-pre-wrap">
               {movie.review}
             </p>
           </div>
         </div>
 
+        {/* Kısa video modal */}
         {shortVideoOpen && (
           <div
             onClick={() => setShortVideoOpen(false)}
-            style={{
-              position: "fixed",
-              inset: 0,
-              background: "rgba(0,0,0,0.9)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              zIndex: 999,
-            }}
+            className="fixed inset-0 bg-black/90 flex items-center justify-center z-[999]"
           >
             <video
               src={movie.shortVideoUrl}
               controls
               autoPlay
-              style={{
-                maxWidth: "90vw",
-                maxHeight: "80vh",
-                borderRadius: "8px",
-              }}
+              className="max-w-[90vw] max-h-[80vh] rounded-lg"
               onClick={(e) => e.stopPropagation()}
             />
           </div>
         )}
 
+        {/* Uzun video */}
         {movie.videoUrl && (
-          <div style={{ marginBottom: "3rem" }}>
-            <h2
-              style={{
-                color: "#E8C547",
-                fontFamily: "'Playfair Display', serif",
-                marginBottom: "1rem",
-              }}
-            >
+          <div className="mb-12">
+            <h2 className="text-[#E8C547] font-serif text-xl mb-4">
               {t("movie.review_video")}
             </h2>
             <video
               src={movie.videoUrl}
               controls
-              style={{ width: "100%", borderRadius: "8px", background: "#000" }}
+              className="w-full rounded-lg bg-black"
             />
           </div>
         )}
 
+        {/* Yorumlar */}
         <div>
-          <h2
-            style={{
-              color: "#E8C547",
-              fontFamily: "'Playfair Display', serif",
-              marginBottom: "1.5rem",
-            }}
-          >
+          <h2 className="text-[#E8C547] font-serif text-xl mb-6">
             {t("movie.comments")}
           </h2>
 
           {token && (
-            <form onSubmit={handleAddComment} style={{ marginBottom: "2rem" }}>
+            <form onSubmit={handleAddComment} className="mb-8">
               <textarea
                 value={commentText}
                 onChange={(e) => setCommentText(e.target.value)}
                 placeholder={t("movie.comment_placeholder")}
                 rows={3}
-                style={{
-                  width: "100%",
-                  background: "#111118",
-                  border: "1px solid #2a2a3e",
-                  borderRadius: "4px",
-                  padding: "0.75rem",
-                  color: "#e0e0e0",
-                  fontSize: "0.95rem",
-                  outline: "none",
-                  resize: "vertical",
-                  boxSizing: "border-box",
-                }}
+                className="w-full bg-[#111118] border border-[#2a2a3e] rounded px-3 py-3 text-[#e0e0e0] text-sm outline-none resize-y focus:border-[#E8C547] transition-colors box-border"
               />
               <button
                 type="submit"
-                style={{
-                  background: "#E8C547",
-                  color: "#0D0D0F",
-                  border: "none",
-                  borderRadius: "4px",
-                  padding: "0.6rem 1.5rem",
-                  fontWeight: 700,
-                  cursor: "pointer",
-                  marginTop: "0.5rem",
-                }}
+                className="bg-[#E8C547] text-[#0D0D0F] border-none rounded px-6 py-2.5 font-bold cursor-pointer mt-2 hover:opacity-90 transition-opacity"
               >
                 {t("movie.comment_btn")}
               </button>
@@ -307,68 +183,34 @@ export default function MovieDetailPage() {
           )}
 
           {comments.length === 0 ? (
-            <p style={{ color: "#666" }}>{t("movie.no_comments")}</p>
+            <p className="text-[#666]">{t("movie.no_comments")}</p>
           ) : (
-            <div
-              style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
-            >
+            <div className="flex flex-col gap-4">
               {comments.map((comment) => (
                 <div
                   key={comment.id}
-                  style={{
-                    background: "#111118",
-                    border: "1px solid #1a1a2e",
-                    borderRadius: "8px",
-                    padding: "1rem",
-                  }}
+                  className="bg-[#111118] border border-[#1a1a2e] rounded-lg p-4"
                 >
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "flex-start",
-                    }}
-                  >
+                  <div className="flex justify-between items-start">
                     <Link
                       to={`/profile/${comment.userId}`}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "0.75rem",
-                        marginBottom: "0.5rem",
-                        textDecoration: "none",
-                      }}
+                      className="flex items-center gap-3 mb-2 no-underline"
                     >
                       {comment.userProfilePhoto ? (
                         <img
                           src={comment.userProfilePhoto}
                           alt={comment.username}
-                          style={{
-                            width: "36px",
-                            height: "36px",
-                            borderRadius: "50%",
-                            objectFit: "cover",
-                            border: "1px solid #2a2a3e",
-                            cursor: "pointer",
-                            flexShrink: 0,
-                          }}
+                          className="w-9 h-9 rounded-full object-cover border border-[#2a2a3e] flex-shrink-0"
                         />
                       ) : (
                         <DefaultAvatar size={36} />
                       )}
                       <div>
-                        <span
-                          style={{
-                            color: "#E8C547",
-                            fontSize: "0.85rem",
-                            fontWeight: 600,
-                            display: "block",
-                          }}
-                        >
+                        <span className="text-[#E8C547] text-sm font-semibold block">
                           {comment.username}
                         </span>
                         {comment.createdAt && (
-                          <span style={{ color: "#555", fontSize: "0.75rem" }}>
+                          <span className="text-[#555] text-xs">
                             {new Date(comment.createdAt).toLocaleDateString(
                               i18n.language === "tr" ? "tr-TR" : "en-US",
                               {
@@ -385,26 +227,13 @@ export default function MovieDetailPage() {
                       (isAdmin || user?.id === comment.userId?.toString()) && (
                         <button
                           onClick={() => handleDeleteComment(comment.id)}
-                          style={{
-                            background: "transparent",
-                            border: "none",
-                            color: "#C62A2A",
-                            cursor: "pointer",
-                            fontSize: "0.8rem",
-                          }}
+                          className="bg-transparent border-none text-[#C62A2A] cursor-pointer text-xs"
                         >
                           {t("movie.delete_comment")}
                         </button>
                       )}
                   </div>
-                  <p
-                    style={{
-                      color: "#ccc",
-                      fontSize: "0.9rem",
-                      margin: 0,
-                      lineHeight: 1.6,
-                    }}
-                  >
+                  <p className="text-[#ccc] text-sm m-0 leading-relaxed">
                     {comment.content}
                   </p>
                 </div>
