@@ -2,7 +2,7 @@ import { useState } from "react";
 import { searchTmdb } from "../api/tmdb";
 import {
   createMovie,
-  searchMovies2 as searchMovies,
+  adminSearch as searchMovies,
   deleteMovie,
   updateMovie,
 } from "../api/movies";

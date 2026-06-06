@@ -9,8 +9,5 @@ export const searchMovies = (q) =>
 export const createMovie = (data) => api.post("/api/movies", data);
 export const updateMovie = (id, data) => api.put(`/api/movies/${id}`, data);
 export const deleteMovie = (id) => api.delete(`/api/movies/${id}`);
-export const getTrendingSearches = () =>
-  api.get("/api/movies/trending-searches");
-
 export const adminSearch = (q) =>
   api.get("/api/movies/admin/search", { params: { q } });

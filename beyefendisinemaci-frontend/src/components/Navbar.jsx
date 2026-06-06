@@ -1,21 +1,17 @@
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { logout } from "../api/auth";
 import DefaultAvatar from "./DefaultAvatar";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { useTranslation } from "react-i18next";
-import { getTrendingSearches } from "../api/movies";
 
 export default function Navbar() {
   const { token, user, logoutUser, isAdmin } = useAuth();
   const navigate = useNavigate();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [query, setQuery] = useState("");
-  const [trending, setTrending] = useState([]);
-  const [showTrending, setShowTrending] = useState(false);
   const { t } = useTranslation();
-  const inputRef = useRef(null);
 
   const handleLogout = async () => {
     try {
@@ -31,28 +27,7 @@ export default function Navbar() {
   const handleSearch = (e) => {
     e.preventDefault();
     if (!query.trim()) return;
-    setShowTrending(false);
     navigate(`/movies?q=${encodeURIComponent(query)}`);
-  };
-
-  const handleFocus = async () => {
-    try {
-      const res = await getTrendingSearches();
-      setTrending(res.data || []);
-      setShowTrending(true);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const handleBlur = () => {
-    setTimeout(() => setShowTrending(false), 150);
-  };
-
-  const handleTrendingClick = (term) => {
-    setQuery(term);
-    setShowTrending(false);
-    navigate(`/movies?q=${encodeURIComponent(term)}`);
   };
 
   return (
@@ -64,42 +39,18 @@ export default function Navbar() {
         Beyefendi Sinemacı
       </Link>
 
-      {/* Arama */}
       <form
         onSubmit={handleSearch}
         className="relative flex-shrink-0 w-64 mx-4"
       >
         <input
-          ref={inputRef}
           value={query}
-          onChange={(e) => {
-            setQuery(e.target.value);
-            setShowTrending(false);
-          }}
-          onFocus={handleFocus}
-          onBlur={handleBlur}
+          onChange={(e) => setQuery(e.target.value)}
           placeholder={t("movies.search_placeholder")}
           className="w-full bg-[#111118] border border-[#2a2a3e] rounded px-4 py-1.5 text-[#e0e0e0] text-sm outline-none focus:border-[#E8C547] transition-colors box-border"
         />
-        {showTrending && trending.length > 0 && (
-          <div className="absolute top-full left-0 right-0 bg-[#111118] border border-[#2a2a3e] rounded mt-1 z-[200]">
-            <p className="text-[#666] text-xs px-4 pt-2 pb-1 m-0">
-              En çok arananlar
-            </p>
-            {trending.map((term, i) => (
-              <div
-                key={i}
-                onMouseDown={() => handleTrendingClick(term)}
-                className="px-4 py-2 text-[#e0e0e0] text-sm cursor-pointer hover:bg-[#1a1a2e] transition-colors"
-              >
-                🔥 {term}
-              </div>
-            ))}
-          </div>
-        )}
       </form>
 
-      {/* Sağ menü */}
       <div className="flex items-center gap-6">
         <Link
           to="/movies"
