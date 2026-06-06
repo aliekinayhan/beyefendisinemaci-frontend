@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 
 export default function ProfilePage() {
   const { id } = useParams();
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, removeFromWatchlistContext } = useAuth();
   const [profile, setProfile] = useState(null);
   const [watchlist, setWatchlist] = useState([]);
   const [comments, setComments] = useState([]);
@@ -48,6 +48,7 @@ export default function ProfilePage() {
     try {
       await removeFromWatchlist(movieId);
       setWatchlist(watchlist.filter((w) => w.movieId !== movieId));
+      removeFromWatchlistContext(movieId);
     } catch (err) {
       console.error(err);
     }
@@ -92,7 +93,6 @@ export default function ProfilePage() {
         </div>
       )}
 
-      {/* Cover photo */}
       <div className="bg-[#0D0D0F] pt-8 px-4 sm:px-8">
         <div
           onClick={() =>
@@ -119,7 +119,6 @@ export default function ProfilePage() {
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-8">
-        {/* Avatar + edit button */}
         <div className="flex items-end justify-between -mt-14 sm:-mt-16 mb-4">
           <div
             onClick={() =>
@@ -151,18 +150,16 @@ export default function ProfilePage() {
           {profile.username}
         </h1>
 
-        {/* Tabs */}
         <div className="flex border-b border-[#1a1a2e] mb-8">
           {["watchlist", "comments"].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`bg-transparent border-none px-6 py-3 cursor-pointer text-sm font-medium transition-colors
-                ${
-                  activeTab === tab
-                    ? "text-[#E8C547] border-b-2 border-[#E8C547]"
-                    : "text-[#666] border-b-2 border-transparent hover:text-[#999]"
-                }`}
+              className={`bg-transparent border-none px-6 py-3 cursor-pointer text-sm font-medium transition-colors ${
+                activeTab === tab
+                  ? "text-[#E8C547] border-b-2 border-[#E8C547]"
+                  : "text-[#666] border-b-2 border-transparent hover:text-[#999]"
+              }`}
             >
               {tab === "watchlist"
                 ? t("profile.watchlist_tab")
@@ -171,7 +168,6 @@ export default function ProfilePage() {
           ))}
         </div>
 
-        {/* Watchlist */}
         {activeTab === "watchlist" && (
           <div>
             {watchlist.length === 0 ? (
@@ -185,15 +181,20 @@ export default function ProfilePage() {
                       className="no-underline"
                     >
                       <div className="bg-[#111118] border border-[#1a1a2e] rounded-lg overflow-hidden hover:border-[#E8C547] transition-colors">
-                        {item.posterUrl ? (
-                          <img
-                            src={item.posterUrl}
-                            alt={item.movieTitle}
-                            className="w-full h-48 sm:h-56 object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-48 sm:h-56 bg-[#1a1a2e]" />
-                        )}
+                        <div
+                          className="relative overflow-hidden"
+                          style={{ paddingBottom: "150%" }}
+                        >
+                          {item.posterUrl ? (
+                            <img
+                              src={item.posterUrl}
+                              alt={item.movieTitle}
+                              className="absolute inset-0 w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="absolute inset-0 bg-[#1a1a2e]" />
+                          )}
+                        </div>
                         <div className="p-2">
                           <p className="text-[#e0e0e0] text-sm m-0 truncate">
                             {item.movieTitle}
@@ -216,7 +217,6 @@ export default function ProfilePage() {
           </div>
         )}
 
-        {/* Comments */}
         {activeTab === "comments" && (
           <div className="flex flex-col gap-4 pb-8">
             {comments.length === 0 ? (
