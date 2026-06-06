@@ -1,7 +1,12 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { getMovieById } from "../api/movies";
-import { getCommentsByMovie, addComment, deleteComment } from "../api/comments";
+import {
+  getCommentsByMovie,
+  addComment,
+  deleteComment,
+  updateComment,
+} from "../api/comments";
 import { useAuth } from "../context/AuthContext";
 import DefaultAvatar from "../components/DefaultAvatar";
 import { useTranslation } from "react-i18next";
@@ -14,6 +19,8 @@ export default function MovieDetailPage() {
   const [commentText, setCommentText] = useState("");
   const [loading, setLoading] = useState(true);
   const [shortVideoOpen, setShortVideoOpen] = useState(false);
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editingContent, setEditingContent] = useState("");
   const { t, i18n } = useTranslation();
 
   useEffect(() => {
@@ -63,6 +70,28 @@ export default function MovieDetailPage() {
     }
   };
 
+  const handleEditStart = (comment) => {
+    setEditingCommentId(comment.id);
+    setEditingContent(comment.content);
+  };
+
+  const handleEditCancel = () => {
+    setEditingCommentId(null);
+    setEditingContent("");
+  };
+
+  const handleEditSave = async (commentId) => {
+    if (!editingContent.trim()) return;
+    try {
+      const res = await updateComment(commentId, { content: editingContent });
+      setComments(comments.map((c) => (c.id === commentId ? res.data : c)));
+      setEditingCommentId(null);
+      setEditingContent("");
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   if (loading)
     return (
       <div className="bg-[#0D0D0F] min-h-screen flex items-center justify-center">
@@ -80,7 +109,6 @@ export default function MovieDetailPage() {
   return (
     <div className="bg-[#0D0D0F] min-h-screen p-8">
       <div className="max-w-4xl mx-auto">
-        {/* Film bilgisi */}
         <div className="flex gap-8 mb-12 flex-wrap items-start">
           <div className="relative flex-shrink-0 w-48 sm:w-60 h-72 sm:h-[360px]">
             <img
@@ -128,7 +156,6 @@ export default function MovieDetailPage() {
           </div>
         </div>
 
-        {/* Kısa video modal */}
         {shortVideoOpen && (
           <div
             onClick={() => setShortVideoOpen(false)}
@@ -144,7 +171,6 @@ export default function MovieDetailPage() {
           </div>
         )}
 
-        {/* Uzun video */}
         {movie.videoUrl && (
           <div className="mb-12">
             <h2 className="text-[#E8C547] font-serif text-xl mb-4">
@@ -158,7 +184,6 @@ export default function MovieDetailPage() {
           </div>
         )}
 
-        {/* Yorumlar */}
         <div>
           <h2 className="text-[#E8C547] font-serif text-xl mb-6">
             {t("movie.comments")}
@@ -223,19 +248,56 @@ export default function MovieDetailPage() {
                         )}
                       </div>
                     </Link>
-                    {token &&
-                      (isAdmin || user?.id === comment.userId?.toString()) && (
+                    <div className="flex gap-2">
+                      {token && user?.id === comment.userId?.toString() && (
                         <button
-                          onClick={() => handleDeleteComment(comment.id)}
-                          className="bg-transparent border-none text-[#C62A2A] cursor-pointer text-xs"
+                          onClick={() => handleEditStart(comment)}
+                          className="bg-transparent border-none text-[#E8C547] cursor-pointer text-xs"
                         >
-                          {t("movie.delete_comment")}
+                          Düzenle
                         </button>
                       )}
+                      {token &&
+                        (isAdmin ||
+                          user?.id === comment.userId?.toString()) && (
+                          <button
+                            onClick={() => handleDeleteComment(comment.id)}
+                            className="bg-transparent border-none text-[#C62A2A] cursor-pointer text-xs"
+                          >
+                            {t("movie.delete_comment")}
+                          </button>
+                        )}
+                    </div>
                   </div>
-                  <p className="text-[#ccc] text-sm m-0 leading-relaxed">
-                    {comment.content}
-                  </p>
+
+                  {editingCommentId === comment.id ? (
+                    <div>
+                      <textarea
+                        value={editingContent}
+                        onChange={(e) => setEditingContent(e.target.value)}
+                        rows={3}
+                        className="w-full bg-[#0D0D0F] border border-[#2a2a3e] rounded px-3 py-2 text-[#e0e0e0] text-sm outline-none resize-y focus:border-[#E8C547] transition-colors box-border mt-2"
+                      />
+                      <div className="flex gap-2 mt-2">
+                        <button
+                          onClick={() => handleEditSave(comment.id)}
+                          className="bg-[#E8C547] text-[#0D0D0F] border-none rounded px-4 py-1.5 text-xs font-bold cursor-pointer hover:opacity-90 transition-opacity"
+                        >
+                          Kaydet
+                        </button>
+                        <button
+                          onClick={handleEditCancel}
+                          className="bg-transparent border border-[#333] text-[#666] rounded px-4 py-1.5 text-xs cursor-pointer"
+                        >
+                          İptal
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <p className="text-[#ccc] text-sm m-0 leading-relaxed">
+                      {comment.content}
+                    </p>
+                  )}
                 </div>
               ))}
             </div>
