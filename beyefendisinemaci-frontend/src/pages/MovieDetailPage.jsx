@@ -254,7 +254,7 @@ export default function MovieDetailPage() {
                           onClick={() => handleEditStart(comment)}
                           className="bg-transparent border-none text-[#E8C547] cursor-pointer text-xs"
                         >
-                          Düzenle
+                          {t("movie.edit_comment")}
                         </button>
                       )}
                       {token &&
@@ -283,13 +283,13 @@ export default function MovieDetailPage() {
                           onClick={() => handleEditSave(comment.id)}
                           className="bg-[#E8C547] text-[#0D0D0F] border-none rounded px-4 py-1.5 text-xs font-bold cursor-pointer hover:opacity-90 transition-opacity"
                         >
-                          Kaydet
+                          {t("common.save")}
                         </button>
                         <button
                           onClick={handleEditCancel}
                           className="bg-transparent border border-[#333] text-[#666] rounded px-4 py-1.5 text-xs cursor-pointer"
                         >
-                          İptal
+                          {t("common.cancel")}
                         </button>
                       </div>
                     </div>

@@ -58,6 +58,7 @@ const resources = {
         comment_btn: "Comment",
         no_comments: "No comments yet.",
         delete_comment: "Delete",
+        edit_comment: "Edit",
       },
       movies: {
         title: "All Movies",
@@ -240,6 +241,7 @@ const resources = {
         comment_btn: "Yorum Yap",
         no_comments: "Henüz yorum yok.",
         delete_comment: "Sil",
+        edit_comment: "Düzenle",
       },
       movies: {
         title: "Tüm Filmler",
