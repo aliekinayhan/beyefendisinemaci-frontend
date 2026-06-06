@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { getMovies, searchMovies } from "../api/movies";
+import { useState, useEffect, useRef } from "react";
+import { getMovies, searchMovies, getTrendingSearches } from "../api/movies";
 import MovieCard from "../components/MovieCard";
 import { useAuth } from "../context/AuthContext";
 import { useTranslation } from "react-i18next";
@@ -12,7 +12,10 @@ export default function MoviesPage() {
   const [totalPages, setTotalPages] = useState(0);
   const [query, setQuery] = useState("");
   const [searching, setSearching] = useState(false);
+  const [trending, setTrending] = useState([]);
+  const [showTrending, setShowTrending] = useState(false);
   const { t } = useTranslation();
+  const inputRef = useRef(null);
 
   const fetchMovies = async (pageNum = 0) => {
     setLoading(true);
@@ -25,6 +28,15 @@ export default function MoviesPage() {
       setMovies([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchTrending = async () => {
+    try {
+      const res = await getTrendingSearches();
+      setTrending(res.data || []);
+    } catch (err) {
+      console.error(err);
     }
   };
 
@@ -41,6 +53,7 @@ export default function MoviesPage() {
     }
     setLoading(true);
     setSearching(true);
+    setShowTrending(false);
     try {
       const res = await searchMovies(query);
       setMovies(res.data || []);
@@ -53,6 +66,26 @@ export default function MoviesPage() {
     }
   };
 
+  const handleFocus = () => {
+    fetchTrending();
+    setShowTrending(true);
+  };
+
+  const handleBlur = () => {
+    // Biraz bekle, tıklama eventi önce çalışsın
+    setTimeout(() => setShowTrending(false), 150);
+  };
+
+  const handleTrendingClick = (term) => {
+    setQuery(term);
+    setShowTrending(false);
+    searchMovies(term).then((res) => {
+      setMovies(res.data || []);
+      setSearching(true);
+      setTotalPages(0);
+    });
+  };
+
   return (
     <div className="bg-[#0D0D0F] min-h-screen p-8">
       <div className="max-w-6xl mx-auto">
@@ -60,19 +93,41 @@ export default function MoviesPage() {
           {t("movies.title")}
         </h1>
 
-        <form onSubmit={handleSearch} className="flex gap-3 mb-8">
-          <input
-            value={query}
-            onChange={(e) => {
-              setQuery(e.target.value);
-              if (!e.target.value) {
-                setSearching(false);
-                fetchMovies(0);
-              }
-            }}
-            placeholder={t("movies.search_placeholder")}
-            className="flex-1 bg-[#111118] border border-[#2a2a3e] rounded px-4 py-2.5 text-[#e0e0e0] text-sm outline-none focus:border-[#E8C547] transition-colors"
-          />
+        <form onSubmit={handleSearch} className="flex gap-3 mb-8 relative">
+          <div className="flex-1 relative">
+            <input
+              ref={inputRef}
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                if (!e.target.value) {
+                  setSearching(false);
+                  fetchMovies(0);
+                }
+                setShowTrending(false);
+              }}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              placeholder={t("movies.search_placeholder")}
+              className="w-full bg-[#111118] border border-[#2a2a3e] rounded px-4 py-2.5 text-[#e0e0e0] text-sm outline-none focus:border-[#E8C547] transition-colors"
+            />
+            {showTrending && trending.length > 0 && (
+              <div className="absolute top-full left-0 right-0 bg-[#111118] border border-[#2a2a3e] rounded mt-1 z-10">
+                <p className="text-[#666] text-xs px-4 pt-3 pb-1">
+                  En çok arananlar
+                </p>
+                {trending.map((term, i) => (
+                  <div
+                    key={i}
+                    onMouseDown={() => handleTrendingClick(term)}
+                    className="px-4 py-2 text-[#e0e0e0] text-sm cursor-pointer hover:bg-[#1a1a2e] transition-colors"
+                  >
+                    🔥 {term}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
           <button
             type="submit"
             className="bg-[#E8C547] text-[#0D0D0F] border-none rounded px-6 py-2.5 font-bold cursor-pointer hover:opacity-90 transition-opacity"
