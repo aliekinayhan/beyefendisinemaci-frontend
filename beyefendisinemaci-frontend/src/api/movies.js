@@ -12,5 +12,5 @@ export const deleteMovie = (id) => api.delete(`/api/movies/${id}`);
 export const getTrendingSearches = () =>
   api.get("/api/movies/trending-searches");
 
-export const searchMovies2 = (q) =>
-  api.get("/api/movies/searching", { params: { q } });
+export const adminSearch = (q) =>
+  api.get("/api/movies/admin/search", { params: { q } });
