@@ -64,91 +64,52 @@ export default function ProfilePage() {
 
   if (loading)
     return (
-      <div
-        style={{
-          background: "#0D0D0F",
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <p style={{ color: "#666" }}>{t("profile.loading")}</p>
+      <div className="bg-[#0D0D0F] min-h-screen flex items-center justify-center">
+        <p className="text-[#666]">{t("profile.loading")}</p>
       </div>
     );
 
   if (!profile)
     return (
-      <div
-        style={{
-          background: "#0D0D0F",
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <p style={{ color: "#666" }}>{t("profile.not_found")}</p>
+      <div className="bg-[#0D0D0F] min-h-screen flex items-center justify-center">
+        <p className="text-[#666]">{t("profile.not_found")}</p>
       </div>
     );
 
   return (
-    <div style={{ background: "#0D0D0F", minHeight: "100vh" }}>
-      {/* Fotoğraf önizleme modal */}
+    <div className="bg-[#0D0D0F] min-h-screen">
       {previewPhoto && (
         <div
           onClick={() => setPreviewPhoto(null)}
-          style={{
-            position: "fixed",
-            inset: 0,
-            background: "rgba(0,0,0,0.9)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 999,
-            cursor: "pointer",
-          }}
+          className="fixed inset-0 bg-black/90 flex items-center justify-center z-[999] cursor-pointer"
         >
           <img
             src={previewPhoto}
             alt="preview"
-            style={{
-              maxWidth: "90vw",
-              maxHeight: "90vh",
-              borderRadius: "8px",
-              objectFit: "contain",
-            }}
+            className="max-w-[90vw] max-h-[90vh] rounded-lg object-contain"
             onClick={(e) => e.stopPropagation()}
           />
         </div>
       )}
 
-      <div style={{ background: "#0D0D0F", padding: "2rem 2rem 0" }}>
+      {/* Cover photo */}
+      <div className="bg-[#0D0D0F] pt-8 px-4 sm:px-8">
         <div
           onClick={() =>
             profile.coverPhoto && setPreviewPhoto(profile.coverPhoto)
           }
-          style={{
-            maxWidth: "900px",
-            margin: "0 auto",
-            height: "200px",
-            borderRadius: "12px",
-            overflow: "hidden",
-            background: "#1a1a2e",
-            cursor: profile.coverPhoto ? "pointer" : "default",
-          }}
+          className={`max-w-4xl mx-auto h-36 sm:h-48 rounded-xl overflow-hidden bg-[#1a1a2e] ${profile.coverPhoto ? "cursor-pointer" : "cursor-default"}`}
         >
           {profile.coverPhoto ? (
             <img
               src={profile.coverPhoto}
               alt="kapak"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              className="w-full h-full object-cover"
             />
           ) : (
             <div
+              className="w-full h-full"
               style={{
-                width: "100%",
-                height: "100%",
                 background:
                   "repeating-linear-gradient(135deg, #1a1a2e 0px, #1a1a2e 20px, #1e1e35 20px, #1e1e35 40px)",
               }}
@@ -157,94 +118,51 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <div style={{ maxWidth: "900px", margin: "0 auto", padding: "0 2rem" }}>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "flex-end",
-            justifyContent: "space-between",
-            marginTop: "-60px",
-            marginBottom: "1rem",
-          }}
-        >
+      <div className="max-w-4xl mx-auto px-4 sm:px-8">
+        {/* Avatar + edit button */}
+        <div className="flex items-end justify-between -mt-14 sm:-mt-16 mb-4">
           <div
             onClick={() =>
               profile.profilePhoto && setPreviewPhoto(profile.profilePhoto)
             }
-            style={{
-              width: "120px",
-              height: "120px",
-              borderRadius: "50%",
-              border: "4px solid #0D0D0F",
-              overflow: "hidden",
-              flexShrink: 0,
-              cursor: profile.profilePhoto ? "pointer" : "default",
-            }}
+            className={`w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 border-[#0D0D0F] overflow-hidden flex-shrink-0 ${profile.profilePhoto ? "cursor-pointer" : "cursor-default"}`}
           >
             {profile.profilePhoto ? (
               <img
                 src={profile.profilePhoto}
                 alt={profile.username}
-                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                className="w-full h-full object-cover"
               />
             ) : (
-              <DefaultAvatar size={120} />
+              <DefaultAvatar size={128} />
             )}
           </div>
           {isOwner && (
             <Link
               to="/settings"
-              style={{
-                color: "#E8C547",
-                border: "1px solid #E8C547",
-                borderRadius: "4px",
-                padding: "0.4rem 1rem",
-                fontSize: "0.85rem",
-                textDecoration: "none",
-                alignSelf: "flex-end",
-                marginBottom: "0.25rem",
-              }}
+              className="text-[#E8C547] border border-[#E8C547] rounded px-4 py-1.5 text-sm no-underline self-end mb-1 hover:bg-[#E8C547]/10 transition-colors"
             >
               {t("profile.edit_profile")}
             </Link>
           )}
         </div>
 
-        <h1
-          style={{
-            color: "#e0e0e0",
-            fontFamily: "'Playfair Display', serif",
-            fontSize: "1.5rem",
-            margin: "0 0 1.5rem",
-          }}
-        >
+        <h1 className="text-[#e0e0e0] text-2xl font-serif mb-6">
           {profile.username}
         </h1>
 
-        <div
-          style={{
-            display: "flex",
-            borderBottom: "1px solid #1a1a2e",
-            marginBottom: "2rem",
-          }}
-        >
+        {/* Tabs */}
+        <div className="flex border-b border-[#1a1a2e] mb-8">
           {["watchlist", "comments"].map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              style={{
-                background: "transparent",
-                border: "none",
-                borderBottom:
+              className={`bg-transparent border-none px-6 py-3 cursor-pointer text-sm font-medium transition-colors
+                ${
                   activeTab === tab
-                    ? "2px solid #E8C547"
-                    : "2px solid transparent",
-                color: activeTab === tab ? "#E8C547" : "#666",
-                padding: "0.75rem 1.5rem",
-                cursor: "pointer",
-                fontSize: "0.9rem",
-                fontWeight: activeTab === tab ? 600 : 400,
-              }}
+                    ? "text-[#E8C547] border-b-2 border-[#E8C547]"
+                    : "text-[#666] border-b-2 border-transparent hover:text-[#999]"
+                }`}
             >
               {tab === "watchlist"
                 ? t("profile.watchlist_tab")
@@ -253,63 +171,31 @@ export default function ProfilePage() {
           ))}
         </div>
 
+        {/* Watchlist */}
         {activeTab === "watchlist" && (
           <div>
             {watchlist.length === 0 ? (
-              <p style={{ color: "#666" }}>{t("profile.watchlist_empty")}</p>
+              <p className="text-[#666]">{t("profile.watchlist_empty")}</p>
             ) : (
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
-                  gap: "1.5rem",
-                  paddingBottom: "2rem",
-                }}
-              >
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 pb-8">
                 {watchlist.map((item) => (
-                  <div key={item.movieId} style={{ position: "relative" }}>
+                  <div key={item.movieId} className="relative">
                     <Link
                       to={`/movies/${item.movieId}`}
-                      style={{ textDecoration: "none" }}
+                      className="no-underline"
                     >
-                      <div
-                        style={{
-                          background: "#111118",
-                          border: "1px solid #1a1a2e",
-                          borderRadius: "8px",
-                          overflow: "hidden",
-                        }}
-                      >
+                      <div className="bg-[#111118] border border-[#1a1a2e] rounded-lg overflow-hidden hover:border-[#E8C547] transition-colors">
                         {item.posterUrl ? (
                           <img
                             src={item.posterUrl}
                             alt={item.movieTitle}
-                            style={{
-                              width: "100%",
-                              height: "225px",
-                              objectFit: "cover",
-                            }}
+                            className="w-full h-48 sm:h-56 object-cover"
                           />
                         ) : (
-                          <div
-                            style={{
-                              width: "100%",
-                              height: "225px",
-                              background: "#1a1a2e",
-                            }}
-                          />
+                          <div className="w-full h-48 sm:h-56 bg-[#1a1a2e]" />
                         )}
-                        <div style={{ padding: "0.5rem" }}>
-                          <p
-                            style={{
-                              color: "#e0e0e0",
-                              fontSize: "0.85rem",
-                              margin: 0,
-                              whiteSpace: "nowrap",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                            }}
-                          >
+                        <div className="p-2">
+                          <p className="text-[#e0e0e0] text-sm m-0 truncate">
                             {item.movieTitle}
                           </p>
                         </div>
@@ -318,18 +204,7 @@ export default function ProfilePage() {
                     {isOwner && (
                       <button
                         onClick={() => handleRemoveFromWatchlist(item.movieId)}
-                        style={{
-                          position: "absolute",
-                          top: "6px",
-                          right: "6px",
-                          background: "rgba(198,42,42,0.8)",
-                          border: "none",
-                          borderRadius: "4px",
-                          color: "#fff",
-                          fontSize: "0.7rem",
-                          padding: "0.2rem 0.5rem",
-                          cursor: "pointer",
-                        }}
+                        className="absolute top-1.5 right-1.5 bg-red-700/80 border-none rounded text-white text-xs px-2 py-0.5 cursor-pointer"
                       >
                         {t("profile.remove")}
                       </button>
@@ -341,85 +216,35 @@ export default function ProfilePage() {
           </div>
         )}
 
+        {/* Comments */}
         {activeTab === "comments" && (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "1rem",
-              paddingBottom: "2rem",
-            }}
-          >
+          <div className="flex flex-col gap-4 pb-8">
             {comments.length === 0 ? (
-              <p style={{ color: "#666" }}>{t("profile.comments_empty")}</p>
+              <p className="text-[#666]">{t("profile.comments_empty")}</p>
             ) : (
               comments.map((comment) => (
                 <Link
                   key={comment.id}
                   to={`/movies/${comment.movieId}`}
-                  style={{ textDecoration: "none" }}
+                  className="no-underline"
                 >
-                  <div
-                    style={{
-                      background: "#111118",
-                      border: "1px solid #1a1a2e",
-                      borderRadius: "8px",
-                      padding: "1rem",
-                      display: "flex",
-                      gap: "1rem",
-                      alignItems: "flex-start",
-                    }}
-                  >
+                  <div className="bg-[#111118] border border-[#1a1a2e] rounded-lg p-4 flex gap-4 items-start hover:border-[#2a2a3e] transition-colors">
                     {comment.moviePosterUrl ? (
                       <img
                         src={comment.moviePosterUrl}
                         alt={comment.movieTitle}
-                        style={{
-                          width: "50px",
-                          height: "75px",
-                          objectFit: "cover",
-                          borderRadius: "4px",
-                          flexShrink: 0,
-                        }}
+                        className="w-12 h-[72px] object-cover rounded flex-shrink-0"
                       />
                     ) : (
-                      <div
-                        style={{
-                          width: "50px",
-                          height: "75px",
-                          background: "#1a1a2e",
-                          borderRadius: "4px",
-                          flexShrink: 0,
-                        }}
-                      />
+                      <div className="w-12 h-[72px] bg-[#1a1a2e] rounded flex-shrink-0" />
                     )}
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "flex-start",
-                          marginBottom: "0.4rem",
-                        }}
-                      >
+                    <div className="flex-1 min-w-0">
+                      <div className="flex justify-between items-start mb-1.5">
                         <div>
-                          <p
-                            style={{
-                              color: "#E8C547",
-                              fontSize: "0.85rem",
-                              margin: "0 0 0.2rem",
-                              fontWeight: 600,
-                            }}
-                          >
+                          <p className="text-[#E8C547] text-sm font-semibold m-0 mb-0.5">
                             {comment.movieTitle}
                           </p>
-                          <p
-                            style={{
-                              color: "#555",
-                              fontSize: "0.75rem",
-                              margin: 0,
-                            }}
-                          >
+                          <p className="text-[#555] text-xs m-0">
                             {new Date(comment.createdAt).toLocaleDateString(
                               i18n.language === "tr" ? "tr-TR" : "en-US",
                               {
@@ -436,31 +261,13 @@ export default function ProfilePage() {
                               e.preventDefault();
                               handleDeleteComment(comment.id);
                             }}
-                            style={{
-                              background: "transparent",
-                              border: "none",
-                              color: "#C62A2A",
-                              cursor: "pointer",
-                              fontSize: "0.8rem",
-                              flexShrink: 0,
-                            }}
+                            className="bg-transparent border-none text-[#C62A2A] cursor-pointer text-xs flex-shrink-0"
                           >
                             {t("profile.delete_comment")}
                           </button>
                         )}
                       </div>
-                      <p
-                        style={{
-                          color: "#ccc",
-                          fontSize: "0.9rem",
-                          margin: 0,
-                          lineHeight: 1.6,
-                          overflow: "hidden",
-                          display: "-webkit-box",
-                          WebkitLineClamp: 3,
-                          WebkitBoxOrient: "vertical",
-                        }}
-                      >
+                      <p className="text-[#ccc] text-sm m-0 leading-relaxed line-clamp-3">
                         {comment.content}
                       </p>
                     </div>
