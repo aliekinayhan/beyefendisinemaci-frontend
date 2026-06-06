@@ -1,12 +1,16 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { addToWatchlist, removeFromWatchlist } from "../api/watchlist";
-import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 export default function MovieCard({ movie }) {
-  const { token } = useAuth();
-  const [added, setAdded] = useState(false);
+  const {
+    token,
+    watchlistIds,
+    addToWatchlistContext,
+    removeFromWatchlistContext,
+  } = useAuth();
+  const added = watchlistIds.includes(movie.id);
   const { t } = useTranslation();
 
   const handleWatchlist = async (e) => {
@@ -15,10 +19,10 @@ export default function MovieCard({ movie }) {
     try {
       if (added) {
         await removeFromWatchlist(movie.id);
-        setAdded(false);
+        removeFromWatchlistContext(movie.id);
       } else {
         await addToWatchlist(movie.id);
-        setAdded(true);
+        addToWatchlistContext(movie.id);
       }
     } catch (err) {
       console.error(err);
