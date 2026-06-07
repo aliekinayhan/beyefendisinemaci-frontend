@@ -47,7 +47,7 @@ export default function MovieCard({ movie }) {
           {token && (
             <button
               onClick={handleWatchlist}
-              className={`absolute top-2 right-2 border border-[#E8C547] rounded px-2 py-1 text-xs font-semibold cursor-pointer transition-colors ${
+              className={`absolute top-2 right-2 border border-[#E8C547] rounded px-2 py-1 text-xs font-semibold cursor-pointer transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center ${
                 added
                   ? "bg-[#E8C547] text-[#0D0D0F]"
                   : "bg-black/70 text-[#E8C547] hover:bg-[#E8C547] hover:text-[#0D0D0F]"
@@ -57,8 +57,8 @@ export default function MovieCard({ movie }) {
             </button>
           )}
         </div>
-        <div className="p-3">
-          <h3 className="text-[#e0e0e0] text-sm font-semibold m-0 truncate">
+        <div className="p-2 sm:p-3">
+          <h3 className="text-[#e0e0e0] text-xs sm:text-sm font-semibold m-0 truncate">
             {movie.title}
           </h3>
           {movie.releaseYear && (

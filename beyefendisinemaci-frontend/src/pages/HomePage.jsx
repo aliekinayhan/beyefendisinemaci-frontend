@@ -17,10 +17,10 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="bg-[#0D0D0F] min-h-screen p-8">
+    <div className="bg-[#0D0D0F] min-h-screen p-4 sm:p-8">
       <div className="max-w-6xl mx-auto">
         {/* Hero */}
-        <div className="text-center py-12">
+        <div className="text-center py-8 sm:py-12">
           <h1 className="text-[#E8C547] font-serif text-4xl sm:text-5xl mb-2 tracking-wider">
             Beyefendi Sinemacı
           </h1>
@@ -49,7 +49,7 @@ export default function HomePage() {
             {t("home.no_movies")}
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-6">
             {movies.map((movie) => (
               <MovieCard key={movie.id} movie={movie} />
             ))}

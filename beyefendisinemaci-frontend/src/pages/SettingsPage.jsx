@@ -160,7 +160,7 @@ export default function SettingsPage() {
     );
 
   return (
-    <div className="bg-[#0D0D0F] min-h-screen p-8">
+    <div className="bg-[#0D0D0F] min-h-screen p-4 sm:p-8">
       <Toast message={toast.message} type={toast.type} />
 
       {previewPhoto && (
@@ -178,16 +178,16 @@ export default function SettingsPage() {
       )}
 
       <div className="max-w-xl mx-auto">
-        <h1 className="text-[#E8C547] font-serif text-3xl mb-8">
+        <h1 className="text-[#E8C547] font-serif text-2xl sm:text-3xl mb-6 sm:mb-8">
           {t("settings.title")}
         </h1>
 
         {/* Fotoğraflar */}
-        <div className="bg-[#111118] border border-[#1a1a2e] rounded-lg p-6 mb-6">
+        <div className="bg-[#111118] border border-[#1a1a2e] rounded-lg p-4 sm:p-6 mb-6">
           <h2 className="text-[#e0e0e0] text-base font-semibold mb-5">
             {t("settings.photos")}
           </h2>
-          <div className="flex gap-8 flex-wrap">
+          <div className="flex flex-col sm:flex-row gap-6 sm:gap-8">
             <div>
               <p className="text-[#aaa] text-sm mb-2">
                 {t("settings.profile_photo")}
@@ -210,7 +210,7 @@ export default function SettingsPage() {
                     <DefaultAvatar size={64} />
                   )}
                 </div>
-                <label className="bg-transparent border border-[#2a2a3e] rounded px-3 py-1.5 text-[#e0e0e0] text-sm cursor-pointer hover:border-[#444] transition-colors">
+                <label className="bg-transparent border border-[#2a2a3e] rounded px-3 py-1.5 text-[#e0e0e0] text-sm cursor-pointer hover:border-[#444] transition-colors min-h-[44px] flex items-center">
                   {t("settings.change")}
                   <input
                     type="file"
@@ -242,7 +242,7 @@ export default function SettingsPage() {
                     <div className="w-full h-full bg-[#1a1a2e]" />
                   )}
                 </div>
-                <label className="bg-transparent border border-[#2a2a3e] rounded px-3 py-1.5 text-[#e0e0e0] text-sm cursor-pointer hover:border-[#444] transition-colors">
+                <label className="bg-transparent border border-[#2a2a3e] rounded px-3 py-1.5 text-[#e0e0e0] text-sm cursor-pointer hover:border-[#444] transition-colors min-h-[44px] flex items-center">
                   {t("settings.change")}
                   <input
                     type="file"
@@ -257,7 +257,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Profil Bilgileri */}
-        <div className="bg-[#111118] border border-[#1a1a2e] rounded-lg p-6 mb-6">
+        <div className="bg-[#111118] border border-[#1a1a2e] rounded-lg p-4 sm:p-6 mb-6">
           <h2 className="text-[#e0e0e0] text-base font-semibold mb-5">
             {t("settings.profile_info")}
           </h2>
@@ -273,7 +273,7 @@ export default function SettingsPage() {
                 className="w-full bg-[#0D0D0F] border border-[#2a2a3e] rounded px-3 py-2.5 text-[#e0e0e0] text-sm outline-none focus:border-[#E8C547] transition-colors"
               />
             </div>
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <div className="flex-1">
                 <label className="block text-[#aaa] text-sm mb-1">
                   {t("settings.first_name")}
@@ -310,7 +310,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Şifre Değiştir */}
-        <div className="bg-[#111118] border border-[#1a1a2e] rounded-lg p-6 mb-6">
+        <div className="bg-[#111118] border border-[#1a1a2e] rounded-lg p-4 sm:p-6 mb-6">
           <h2 className="text-[#e0e0e0] text-base font-semibold mb-5">
             {t("settings.change_password")}
           </h2>
@@ -387,7 +387,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Hesabı Sil */}
-        <div className="bg-[#111118] border border-[#3a1010] rounded-lg p-6 mb-6">
+        <div className="bg-[#111118] border border-[#3a1010] rounded-lg p-4 sm:p-6 mb-6">
           <h2 className="text-[#C62A2A] text-base font-semibold mb-5">
             {t("settings.delete_account")}
           </h2>

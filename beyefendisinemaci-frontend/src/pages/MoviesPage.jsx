@@ -52,9 +52,9 @@ export default function MoviesPage() {
   }, [page, token, query]);
 
   return (
-    <div className="bg-[#0D0D0F] min-h-screen p-8">
+    <div className="bg-[#0D0D0F] min-h-screen p-4 sm:p-8">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-[#E8C547] font-serif text-3xl mb-8">
+        <h1 className="text-[#E8C547] font-serif text-2xl sm:text-3xl mb-6 sm:mb-8">
           {query ? `"${query}" sonuçları` : t("movies.title")}
         </h1>
 
@@ -67,7 +67,7 @@ export default function MoviesPage() {
             {t("movies.not_found")}
           </div>
         ) : (
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-6">
             {movies.map((movie) => (
               <MovieCard key={movie.id} movie={movie} />
             ))}
@@ -79,7 +79,7 @@ export default function MoviesPage() {
             <button
               onClick={() => setPage((p) => Math.max(0, p - 1))}
               disabled={page === 0}
-              className={`rounded px-4 py-2 font-semibold text-sm border-none transition-opacity ${
+              className={`rounded px-4 py-2 font-semibold text-sm border-none transition-opacity min-h-[44px] ${
                 page === 0
                   ? "bg-[#1a1a2e] text-[#444] cursor-not-allowed"
                   : "bg-[#E8C547] text-[#0D0D0F] cursor-pointer hover:opacity-90"
@@ -93,7 +93,7 @@ export default function MoviesPage() {
             <button
               onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
               disabled={page === totalPages - 1}
-              className={`rounded px-4 py-2 font-semibold text-sm border-none transition-opacity ${
+              className={`rounded px-4 py-2 font-semibold text-sm border-none transition-opacity min-h-[44px] ${
                 page === totalPages - 1
                   ? "bg-[#1a1a2e] text-[#444] cursor-not-allowed"
                   : "bg-[#E8C547] text-[#0D0D0F] cursor-pointer hover:opacity-90"

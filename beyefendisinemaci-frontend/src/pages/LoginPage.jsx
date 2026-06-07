@@ -32,8 +32,8 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0D0D0F] flex items-center justify-center p-8">
-      <div className="bg-[#111118] border border-[#1a1a2e] rounded-lg p-10 w-full max-w-md">
+    <div className="min-h-screen bg-[#0D0D0F] flex items-center justify-center p-4 sm:p-8">
+      <div className="bg-[#111118] border border-[#1a1a2e] rounded-lg p-6 sm:p-10 w-full max-w-md">
         <h1 className="text-[#E8C547] font-serif text-3xl mb-2 text-center">
           {t("auth.login_title")}
         </h1>
@@ -46,13 +46,11 @@ export default function LoginPage() {
             {t("auth.register_link")}
           </Link>
         </p>
-
         {error && (
           <div className="bg-[#2a1010] border border-[#C62A2A] rounded p-3 text-[#ff6b6b] mb-6 text-sm">
             {error}
           </div>
         )}
-
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
             <label className="block text-[#aaa] text-sm mb-1">

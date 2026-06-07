@@ -43,8 +43,8 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0D0D0F] flex items-center justify-center p-8">
-      <div className="bg-[#111118] border border-[#1a1a2e] rounded-lg p-10 w-full max-w-md">
+    <div className="min-h-screen bg-[#0D0D0F] flex items-center justify-center p-4 sm:p-8">
+      <div className="bg-[#111118] border border-[#1a1a2e] rounded-lg p-6 sm:p-10 w-full max-w-md">
         <h1 className="text-[#E8C547] font-serif text-3xl mb-2 text-center">
           {t("auth.register_title")}
         </h1>
@@ -79,7 +79,7 @@ export default function RegisterPage() {
             />
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-4">
             <div className="flex-1">
               <label className="block text-[#aaa] text-sm mb-1">
                 {t("auth.first_name")}

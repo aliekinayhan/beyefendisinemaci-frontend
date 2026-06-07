@@ -31,17 +31,17 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="bg-[#0D0D0F] min-h-screen p-8">
+    <div className="bg-[#0D0D0F] min-h-screen p-4 sm:p-8">
       <div className="max-w-5xl mx-auto">
-        <h1 className="text-[#E8C547] font-serif text-3xl mb-8">
+        <h1 className="text-[#E8C547] font-serif text-2xl sm:text-3xl mb-6 sm:mb-8">
           {t("admin.title")}
         </h1>
-        <div className="flex border-b border-[#1a1a2e] mb-8">
+        <div className="flex border-b border-[#1a1a2e] mb-6 sm:mb-8">
           {TABS.map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`bg-transparent border-none px-6 py-3 cursor-pointer text-sm transition-colors
+              className={`bg-transparent border-none px-4 sm:px-6 py-3 cursor-pointer text-sm transition-colors
                 ${
                   activeTab === tab
                     ? "text-[#E8C547] border-b-2 border-[#E8C547] font-semibold"
@@ -250,7 +250,8 @@ function FilmlerTab() {
   const inputCls =
     "w-full bg-[#0D0D0F] border border-[#2a2a3e] rounded px-3 py-2.5 text-[#e0e0e0] text-sm outline-none focus:border-[#E8C547] transition-colors box-border";
   const labelCls = "block text-[#aaa] text-sm mb-1";
-  const cardCls = "bg-[#111118] border border-[#1a1a2e] rounded-lg p-6 mb-6";
+  const cardCls =
+    "bg-[#111118] border border-[#1a1a2e] rounded-lg p-4 sm:p-6 mb-6";
   const btnCls =
     "bg-[#E8C547] text-[#0D0D0F] border-none rounded px-6 py-2.5 font-bold cursor-pointer hover:opacity-90 transition-opacity text-sm";
   const smallBtnCls =
@@ -267,14 +268,17 @@ function FilmlerTab() {
             <h2 className="text-[#e0e0e0] text-base font-semibold mb-5">
               {t("admin.tmdb_title")}
             </h2>
-            <form onSubmit={handleTmdbSearch} className="flex gap-3 mb-4">
+            <form
+              onSubmit={handleTmdbSearch}
+              className="flex flex-col sm:flex-row gap-3 mb-4"
+            >
               <input
                 value={tmdbQuery}
                 onChange={(e) => setTmdbQuery(e.target.value)}
                 placeholder={t("admin.tmdb_placeholder")}
                 className={inputCls}
               />
-              <button type="submit" className={btnCls}>
+              <button type="submit" className={`${btnCls} w-full sm:w-auto`}>
                 {t("admin.search_btn")}
               </button>
             </form>
@@ -313,14 +317,17 @@ function FilmlerTab() {
             <h2 className="text-[#e0e0e0] text-base font-semibold mb-5">
               {t("admin.existing_movies")}
             </h2>
-            <form onSubmit={handleMovieSearch} className="flex gap-3 mb-4">
+            <form
+              onSubmit={handleMovieSearch}
+              className="flex flex-col sm:flex-row gap-3 mb-4"
+            >
               <input
                 value={movieQuery}
                 onChange={(e) => setMovieQuery(e.target.value)}
                 placeholder={t("admin.movie_placeholder")}
                 className={inputCls}
               />
-              <button type="submit" className={btnCls}>
+              <button type="submit" className={`${btnCls} w-full sm:w-auto`}>
                 {t("admin.search_btn")}
               </button>
             </form>
@@ -329,7 +336,7 @@ function FilmlerTab() {
                 {movieResults.map((movie) => (
                   <div
                     key={movie.id}
-                    className="bg-[#0D0D0F] border border-[#2a2a3e] rounded-lg px-4 py-3 flex items-center justify-between gap-4"
+                    className="bg-[#0D0D0F] border border-[#2a2a3e] rounded-lg px-4 py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
                   >
                     <Link
                       to={`/movies/${movie.id}`}
@@ -425,7 +432,7 @@ function FilmlerTab() {
             </div>
 
             {/* İsimler */}
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <div className="flex-1">
                 <label className={labelCls}>{t("admin.english_name")}</label>
                 <input
@@ -464,7 +471,7 @@ function FilmlerTab() {
             </div>
 
             {/* Tür ve Yıl */}
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-4">
               <div className="flex-1">
                 <label className={labelCls}>{t("admin.genre")}</label>
                 <input
@@ -488,7 +495,7 @@ function FilmlerTab() {
             {/* Kısa Video */}
             <div>
               <label className={labelCls}>{t("admin.short_video")}</label>
-              <div className="flex gap-3 items-center">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <input
                   value={shortVideoUrl}
                   readOnly
@@ -496,7 +503,7 @@ function FilmlerTab() {
                   className={`${inputCls} flex-1 text-[#666]`}
                 />
                 <label
-                  className={`${smallBtnCls} border-[#2a2a3e] text-[#e0e0e0] hover:border-[#444] px-3 py-1.5 whitespace-nowrap`}
+                  className={`${smallBtnCls} border-[#2a2a3e] text-[#e0e0e0] hover:border-[#444] px-3 py-2 text-center`}
                 >
                   {t("admin.upload_video")}
                   <input
@@ -512,7 +519,7 @@ function FilmlerTab() {
             {/* Uzun Video */}
             <div>
               <label className={labelCls}>{t("admin.long_video")}</label>
-              <div className="flex gap-3 items-center">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <input
                   value={videoUrl}
                   readOnly
@@ -520,7 +527,7 @@ function FilmlerTab() {
                   className={`${inputCls} flex-1 text-[#666]`}
                 />
                 <label
-                  className={`${smallBtnCls} border-[#2a2a3e] text-[#e0e0e0] hover:border-[#444] px-3 py-1.5 whitespace-nowrap`}
+                  className={`${smallBtnCls} border-[#2a2a3e] text-[#e0e0e0] hover:border-[#444] px-3 py-2 text-center`}
                 >
                   {t("admin.upload_video")}
                   <input
@@ -533,7 +540,7 @@ function FilmlerTab() {
               </div>
             </div>
 
-            <div className="flex gap-4">
+            <div className="flex flex-col sm:flex-row gap-3">
               <button
                 type="submit"
                 disabled={loading}
@@ -624,11 +631,14 @@ function KullanicilarTab() {
   return (
     <div>
       <Toast message={toast.message} type={toast.type} />
-      <div className="bg-[#111118] border border-[#1a1a2e] rounded-lg p-6 mb-6">
+      <div className="bg-[#111118] border border-[#1a1a2e] rounded-lg p-4 sm:p-6 mb-6">
         <h2 className="text-[#e0e0e0] text-base font-semibold mb-5">
           {t("admin.user_search_title")}
         </h2>
-        <form onSubmit={handleSearch} className="flex gap-3 mb-6">
+        <form
+          onSubmit={handleSearch}
+          className="flex flex-col sm:flex-row gap-3 mb-6"
+        >
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -637,7 +647,7 @@ function KullanicilarTab() {
           />
           <button
             type="submit"
-            className="bg-[#E8C547] text-[#0D0D0F] border-none rounded px-6 py-2.5 font-bold cursor-pointer hover:opacity-90 transition-opacity text-sm"
+            className="bg-[#E8C547] text-[#0D0D0F] border-none rounded px-6 py-2.5 font-bold cursor-pointer hover:opacity-90 transition-opacity text-sm w-full sm:w-auto"
           >
             {t("admin.search_btn")}
           </button>
@@ -647,7 +657,7 @@ function KullanicilarTab() {
             {users.map((user) => (
               <div
                 key={user.id}
-                className="bg-[#0D0D0F] border border-[#2a2a3e] rounded-lg p-4 flex items-center justify-between gap-4"
+                className="bg-[#0D0D0F] border border-[#2a2a3e] rounded-lg p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
               >
                 <Link
                   to={`/profile/${user.id}`}

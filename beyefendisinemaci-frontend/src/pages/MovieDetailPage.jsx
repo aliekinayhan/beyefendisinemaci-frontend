@@ -107,10 +107,14 @@ export default function MovieDetailPage() {
     );
 
   return (
-    <div className="bg-[#0D0D0F] min-h-screen p-8">
+    <div className="bg-[#0D0D0F] min-h-screen p-4 sm:p-8">
       <div className="max-w-4xl mx-auto">
-        <div className="flex gap-8 mb-12 flex-wrap items-start">
-          <div className="relative flex-shrink-0 w-48 sm:w-60 h-72 sm:h-[360px]">
+        {/* Poster + Bilgi */}
+        <div className="flex flex-col sm:flex-row gap-6 sm:gap-8 mb-8 sm:mb-12 items-start">
+          <div
+            className="relative w-full sm:w-60 sm:flex-shrink-0"
+            style={{ aspectRatio: "2/3" }}
+          >
             <img
               src={
                 movie.posterUrl ||
@@ -138,8 +142,8 @@ export default function MovieDetailPage() {
             )}
           </div>
 
-          <div className="flex-1 min-w-[200px]">
-            <h1 className="text-[#E8C547] font-serif text-3xl sm:text-4xl mb-1">
+          <div className="flex-1 min-w-0">
+            <h1 className="text-[#E8C547] font-serif text-2xl sm:text-4xl mb-1">
               {movie.title}
             </h1>
             {movie.originalTitle && movie.originalTitle !== movie.title && (
@@ -172,7 +176,7 @@ export default function MovieDetailPage() {
         )}
 
         {movie.videoUrl && (
-          <div className="mb-12">
+          <div className="mb-8 sm:mb-12">
             <h2 className="text-[#E8C547] font-serif text-xl mb-4">
               {t("movie.review_video")}
             </h2>
@@ -216,10 +220,10 @@ export default function MovieDetailPage() {
                   key={comment.id}
                   className="bg-[#111118] border border-[#1a1a2e] rounded-lg p-4"
                 >
-                  <div className="flex justify-between items-start">
+                  <div className="flex justify-between items-start gap-2">
                     <Link
                       to={`/profile/${comment.userId}`}
-                      className="flex items-center gap-3 mb-2 no-underline"
+                      className="flex items-center gap-3 mb-2 no-underline min-w-0"
                     >
                       {comment.userProfilePhoto ? (
                         <img
@@ -230,8 +234,8 @@ export default function MovieDetailPage() {
                       ) : (
                         <DefaultAvatar size={36} />
                       )}
-                      <div>
-                        <span className="text-[#E8C547] text-sm font-semibold block">
+                      <div className="min-w-0">
+                        <span className="text-[#E8C547] text-sm font-semibold block truncate">
                           {comment.username}
                         </span>
                         {comment.createdAt && (
@@ -248,11 +252,11 @@ export default function MovieDetailPage() {
                         )}
                       </div>
                     </Link>
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 flex-shrink-0">
                       {token && user?.id === comment.userId?.toString() && (
                         <button
                           onClick={() => handleEditStart(comment)}
-                          className="bg-transparent border-none text-[#E8C547] cursor-pointer text-xs"
+                          className="bg-transparent border-none text-[#E8C547] cursor-pointer text-xs min-h-[36px]"
                         >
                           {t("movie.edit_comment")}
                         </button>
@@ -262,7 +266,7 @@ export default function MovieDetailPage() {
                           user?.id === comment.userId?.toString()) && (
                           <button
                             onClick={() => handleDeleteComment(comment.id)}
-                            className="bg-transparent border-none text-[#C62A2A] cursor-pointer text-xs"
+                            className="bg-transparent border-none text-[#C62A2A] cursor-pointer text-xs min-h-[36px]"
                           >
                             {t("movie.delete_comment")}
                           </button>
